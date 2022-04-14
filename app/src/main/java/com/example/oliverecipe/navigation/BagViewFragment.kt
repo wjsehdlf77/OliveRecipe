@@ -5,6 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.oliverecipe.databinding.FragmentBagBinding
+import kotlinx.android.synthetic.main.fragment_refrigerator.*
+
+private var _binding: FragmentBagBinding? = null
+
+private val binding get() = _binding!!
 
 class BagViewFragment : Fragment() {
 
@@ -13,8 +19,10 @@ class BagViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_bag, container, false)
+        _binding = FragmentBagBinding.inflate(inflater, container, false)
+        val view = binding.root
         return view
     }
+
 
 }
