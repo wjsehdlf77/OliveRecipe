@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:title="홈"/>
+    <item
         android:id="@+id/action_refrigerator"
         android:icon="@drawable/ic_refrigerator"
         android:enabled="true"
@@ -20,9 +25,5 @@
         android:icon="@drawable/ic_shopping_bag"
         android:enabled="true"
         android:title="장바구니"/>
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:enabled="true"
-        android:title="마켓"/>
+
 </menu>
