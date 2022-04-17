@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.oliverecipe.MainActivity">
+
+    <item android:title="개발자 정보">
+        <menu>
+            <item
+                android:id="@+id/action_call"
+                android:title="연락처" />
+            <item
+                android:id="@+id/action_send_text"
+                android:title="문자 보내기" />
+            <item
+                android:id="@+id/action_email"
+                android:title="이메일 보내기" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"
+        app:showAsAction="ifRoom" />
+</menu>
