@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.oliverecipe.R
 
-class RefrigeratorViewFragment : Fragment() {
+class MarketViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_refrigerator, container, false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_market, container, false)
+
         return view
     }
 }
