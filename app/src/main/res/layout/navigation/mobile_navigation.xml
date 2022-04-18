@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_device_control">
+
+    <fragment
+        android:id="@+id/nav_device_control"
+        android:name="com.example.basic_navi.ui.DeviceControlFragment"
+        android:label="장치 제어"
+        tools:layout="@layout/fragment_device_control" />
+
+    <fragment
+        android:id="@+id/nav_secure_camera"
+        android:name="com.example.basic_navi.ui.SecureCameraFragment"
+        android:label="보안 카메라"
+        tools:layout="@layout/fragment_secure_camera" />
+
+    <fragment
+        android:id="@+id/nav_test"
+        android:name="com.example.basic_navi.ui.TestFragment"
+        android:label="테스트"
+        tools:layout="@layout/fragment_test" />
+
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="com.example.basic_navi.ui.SettingFragment"
+        android:label="설정"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

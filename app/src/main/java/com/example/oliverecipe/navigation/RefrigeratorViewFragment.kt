@@ -1,4 +1,4 @@
-package com.example.oliverecipe
+package com.example.oliverecipe.navigation
 
 
 
@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentRefrigeratorBinding
 import java.io.File
 import java.text.SimpleDateFormat

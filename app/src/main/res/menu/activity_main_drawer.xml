@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_home"
+            android:icon="@drawable/ic_home"
+            android:enabled="true"
+            android:title="홈"/>
+        <item
+            android:id="@+id/action_refrigerator"
+            android:icon="@drawable/ic_refrigerator"
+            android:enabled="true"
+            android:title="나의 냉장고"/>
+        <item
+            android:id="@+id/action_foodbank"
+            android:icon="@drawable/ic_baseline_food_bank_24"
+            android:enabled="true"
+            android:title="레시피 추천"/>
+        <item
+            android:id="@+id/action_favorite"
+            android:icon="@drawable/push_icon"
+            android:enabled="true"
+            android:title="북마크"/>
+        <item
+            android:id="@+id/action_shopping_bag"
+            android:icon="@drawable/ic_shopping_bag"
+            android:enabled="true"
+            android:title="장바구니"/>
+    </group>
+</menu>

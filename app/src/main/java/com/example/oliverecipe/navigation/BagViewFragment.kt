@@ -1,4 +1,4 @@
-package com.example.oliverecipe
+package com.example.oliverecipe.navigation
 
 import android.os.Bundle
 import android.view.LayoutInflater

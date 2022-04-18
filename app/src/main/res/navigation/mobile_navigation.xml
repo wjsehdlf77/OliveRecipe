@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/action_home">
+
+    <fragment
+        android:id="@+id/action_home"
+        android:name="com.example.oliverecipe.navigation.HomeViewFragment"
+        android:label="메인 화면"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/action_refrigerator"
+        android:name="com.example.oliverecipe.navigation.RefrigeratorViewFragment"
+        android:label="나의 냉장고"
+        tools:layout="@layout/fragment_refrigerator" />
+
+    <fragment
+        android:id="@+id/action_foodbank"
+        android:name="com.example.oliverecipe.navigation.FoodbankViewFragment"
+        android:label="추천 레시피"
+        tools:layout="@layout/fragment_foodbank" />
+
+    <fragment
+        android:id="@+id/action_favorite"
+        android:name="com.example.oliverecipe.navigation.FavoriteViewFragment"
+        android:label="북마크"
+        tools:layout="@layout/fragment_favorite" />
+
+    <fragment
+        android:id="@+id/action_shopping_bag"
+        android:name="com.example.oliverecipe.navigation.BagViewFragment"
+        android:label="장바구니"
+        tools:layout="@layout/fragment_bag" />
+</navigation>
