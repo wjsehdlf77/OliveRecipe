@@ -58,9 +58,6 @@ class MainActivity : AppCompatActivity()
         // bottom_navigation.setOnNavigationItemSelectedListener(this)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
-
-
-
         //set default screen
 //        bottom_navigation.selectedItemId = R.id.action_home
 //        bottom_navigation.setupWithNavController(navController)
@@ -74,9 +71,6 @@ class MainActivity : AppCompatActivity()
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
-            R.id.action_home -> {
-                bottom_navigation.selectedItemId = R.id.action_home
-            }
 
             R.id.action_add -> {
                 bottom_navigation.selectedItemId = R.id.action_refrigerator
