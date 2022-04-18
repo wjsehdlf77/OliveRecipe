@@ -34,4 +34,16 @@
         android:name="com.example.oliverecipe.navigation.BagViewFragment"
         android:label="장바구니"
         tools:layout="@layout/fragment_bag" />
+
+    <fragment
+        android:id="@+id/action_add"
+        android:name="com.example.oliverecipe.navigation.AddFoodViewFragment"
+        android:label="재료 추가"
+        tools:layout="@layout/fragment_add" />
+
+    <fragment
+        android:id="@+id/action_market"
+        android:name="com.example.oliverecipe.navigation.MarketViewFragment"
+        android:label="마켓으로 이동"
+        tools:layout="@layout/fragment_market" />
 </navigation>

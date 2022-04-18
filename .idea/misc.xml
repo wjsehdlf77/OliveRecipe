@@ -16,10 +16,12 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.11797752808988764" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1526268115942029" />
+        <entry key="app/src/main/res/layout/fragment_add.xml" value="0.23822463768115942" />
         <entry key="app/src/main/res/layout/fragment_bag.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/fragment_foodbank.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.20572916666666666" />
+        <entry key="app/src/main/res/layout/fragment_market.xml" value="0.23822463768115942" />
         <entry key="app/src/main/res/layout/fragment_refrigerator.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.20572916666666666" />

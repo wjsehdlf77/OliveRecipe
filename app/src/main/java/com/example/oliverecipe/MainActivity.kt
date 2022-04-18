@@ -9,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -24,10 +26,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity()
-//    , BottomNavigationView.OnNavigationItemSelectedListener
+
 {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,31 +40,42 @@ class MainActivity : AppCompatActivity()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBarMain.myToolbar)
+        val toolbar = binding.appBarMain.myToolbar
+        setSupportActionBar(toolbar)
+
 
         //setContentView(R.layout.activity_main)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navBottomView : BottomNavigationView = findViewById(R.id.bottom_navigation)
+
+//        val drawerToggle = ActionBarDrawerToggle(
+//            MainActivity(),
+//            drawerLayout,
+//            toolbar,
+//            R.string.app_name,
+//            R.string.app_name)
+//        drawerToggle.syncState()
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val navBottomView : BottomNavigationView = findViewById(R.id.bottom_navigation)
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.action_home, R.id.action_refrigerator, R.id.action_foodbank, R.id.action_favorite, R.id.action_shopping_bag
+                R.id.action_home, R.id.action_refrigerator, R.id.action_foodbank, R.id.action_favorite, R.id.action_shopping_bag,
+                R.id.action_add, R.id.action_market
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navBottomView.setupWithNavController(navController)
 
+
         // bottom_navigation.setOnNavigationItemSelectedListener(this)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
-        //set default screen
-//        bottom_navigation.selectedItemId = R.id.action_home
-//        bottom_navigation.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,55 +85,27 @@ class MainActivity : AppCompatActivity()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navHost = findNavController(R.id.nav_host_fragment_content_main)
         when (item?.itemId) {
 
-            R.id.action_add -> {
-                bottom_navigation.selectedItemId = R.id.action_refrigerator
+            R.id.action_menu_add -> {
+                navHost.navigate(R.id.action_add)
+                return true
 
+//                var addFoodViewFragment = AddFoodViewFragment()
+//                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_content_main, addFoodViewFragment).commit()
+//                return true
             }
 
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun home() {
 
-        var homeViewFragment = HomeViewFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_content_main, homeViewFragment).commit()
-    }
-
-//    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-//        toolbar_title_image.visibility = View.VISIBLE
-//        when(p0.itemId){
-//            R.id.action_refrigerator ->{
-//                var refrigeratorViewFragment = RefrigeratorViewFragment()
-//                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_content_main, refrigeratorViewFragment).commit()
-//                return true
-//            }
-//            R.id.action_foodbank ->{
-//                var foodbankViewFragment = FoodbankViewFragment()
-//                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_content_main, foodbankViewFragment).commit()
-//                return true
-//            }
-//            R.id.action_favorite ->{
-//                var favoriteFragment = FavoriteViewFragment()
-//                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_content_main, favoriteFragment).commit()
-//                return true
-//            }
-//            R.id.action_shopping_bag ->{
-//                var bagFragment = BagViewFragment()
-//                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_content_main, bagFragment).commit()
-//                return true
-//            }
-//            R.id.action_home -> {
-//                home()
-//                return true
-//            }
-//        }
-//        return false
-//    }
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }
