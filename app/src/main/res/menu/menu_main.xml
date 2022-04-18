@@ -3,14 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.oliverecipe.MainActivity">
 
-
-
-    <item
-        android:id="@+id/action_home"
-        android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home"
-        app:showAsAction="ifRoom" />
-
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add"
