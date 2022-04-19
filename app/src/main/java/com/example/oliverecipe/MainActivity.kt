@@ -19,6 +19,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.oliverecipe.databinding.ActivityMainBinding
+import com.example.oliverecipe.databinding.FragmentBagBinding
 import com.example.oliverecipe.navigation.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -30,8 +31,6 @@ class MainActivity : AppCompatActivity()
 {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
