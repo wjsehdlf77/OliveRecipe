@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 import java.io.File
@@ -34,6 +33,7 @@ lateinit var mainActivity: MainActivity
 class AddFoodViewFragment : Fragment() {
 
     lateinit var filePath: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
