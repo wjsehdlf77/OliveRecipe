@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.databinding.ActivityMainBinding
 import com.example.oliverecipe.databinding.FragmentAddBinding
@@ -68,7 +70,6 @@ class BagViewFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://naver.com"))
             startActivity(intent)
         }
-
     }
 
     private fun addTask() {
