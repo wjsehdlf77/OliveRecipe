@@ -28,7 +28,7 @@ private var _binding: FragmentAddBinding? = null
 private val binding get() = _binding!!
 
 
-lateinit var mainActivity: MainActivity
+//lateinit var mainActivity: MainActivity
 
 class AddFoodViewFragment : Fragment() {
 
