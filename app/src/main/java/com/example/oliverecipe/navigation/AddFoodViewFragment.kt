@@ -26,9 +26,6 @@ import com.example.oliverecipe.navigation.view.ItemAdapter
 import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
 
 import com.bumptech.glide.Glide
-import com.example.oliverecipe.MainActivity
-import com.example.oliverecipe.R
-import com.example.oliverecipe.databinding.FragmentAddBinding
 import kotlinx.android.synthetic.main.fragment_add.*
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.Detection
