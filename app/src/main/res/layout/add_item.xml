@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -13,18 +15,20 @@
         android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:text="재료를 추가하세요"
             android:textStyle="bold"
             android:textSize="21sp"
             android:textColor="@color/white"
-            android:background="@color/purple_500"
+            android:background="#D1B86F"
             android:padding="10dp"
             android:elevation="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
         <EditText
             android:id="@+id/add_item_name"
             android:hint="재료 이름"

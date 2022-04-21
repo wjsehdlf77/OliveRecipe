@@ -1,26 +1,40 @@
 package com.example.oliverecipe.navigation
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
+import com.example.oliverecipe.databinding.AddItemBinding
 import com.example.oliverecipe.databinding.FragmentRefrigeratorBinding
 import com.example.oliverecipe.navigation.model.ItemData
 import com.example.oliverecipe.navigation.view.ItemAdapter
-import java.util.ArrayList
+import kotlinx.android.synthetic.main.add_item.*
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 private var _binding: FragmentRefrigeratorBinding? = null
 
 private val binding get() = _binding!!
 
+lateinit var mainActivity: MainActivity
 
 class RefrigeratorViewFragment : Fragment() {
 
@@ -58,6 +72,7 @@ class RefrigeratorViewFragment : Fragment() {
         binding.mRecycler.adapter = itemAdapter
 
         binding.addingBtn.setOnClickListener { addInfo() }
+
     }
 
     private fun addInfo() {
@@ -88,8 +103,5 @@ class RefrigeratorViewFragment : Fragment() {
         addDialog.create()
         addDialog.show()
     }
-
-
-
 
 }
