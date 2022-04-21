@@ -11,12 +11,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
+import com.example.oliverecipe.navigation.model.ItemData
+import com.example.oliverecipe.navigation.view.ItemAdapter
+import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
 
 
 import java.io.File
@@ -33,6 +39,8 @@ private val binding get() = _binding!!
 class AddFoodViewFragment : Fragment() {
 
     lateinit var filePath: String
+    private lateinit var itemList: ArrayList<ItemData>
+    private lateinit var itemAdapter: ItemAdapter
 
 
     override fun onCreateView(
@@ -128,6 +136,28 @@ class AddFoodViewFragment : Fragment() {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             requestCameraFileLauncher.launch(intent)
+        }
+
+        itemList = ArrayList()
+        itemAdapter = ItemAdapter(requireContext(),itemList)
+
+        val inflter = LayoutInflater.from(requireContext())
+        val v = inflter.inflate(R.layout.fragment_refrigerator,null)
+
+        v.mRecycler.layoutManager = LinearLayoutManager(requireContext())
+        v.mRecycler.adapter = itemAdapter
+
+        binding.buttonAdd.setOnClickListener {
+            val inflter = LayoutInflater.from(requireContext())
+            val v = inflter.inflate(R.layout.add_item,null)
+            /**set view*/
+//            val additemName = v.findViewById<EditText>(R.id.add_item_name)
+//            val additemvalid = v.findViewById<EditText>(R.id.add_item_valid)
+            val names = binding.addItemName.text.toString()
+            val number = binding.addItemValid.text.toString()
+            itemList.add(ItemData("재료 이름 : $names","유통 기한 : $number"))
+            itemAdapter.notifyDataSetChanged()
+            Toast.makeText(requireContext(),"재료를 성공적으로 추가하였습니다", Toast.LENGTH_SHORT).show()
         }
     }
 
