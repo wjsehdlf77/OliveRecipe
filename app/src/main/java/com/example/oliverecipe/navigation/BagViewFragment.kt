@@ -39,8 +39,6 @@ class BagViewFragment : Fragment() {
             .build()
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
