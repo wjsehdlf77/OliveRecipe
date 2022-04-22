@@ -16,11 +16,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
+
 import com.squareup.picasso.Picasso
+
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_bag.view.*
 import org.tensorflow.lite.support.image.TensorImage
@@ -28,6 +30,7 @@ import org.tensorflow.lite.support.label.Category
 import org.tensorflow.lite.task.vision.detector.Detection
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
 import java.io.ByteArrayOutputStream
+
 
 
 import java.io.File
@@ -43,7 +46,6 @@ private const val MAX_FONT_SIZE = 96F
 class AddFoodViewFragment : Fragment() {
 
     lateinit var filePath: String
-
 
 
     override fun onCreateView(
@@ -175,6 +177,28 @@ class AddFoodViewFragment : Fragment() {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             requestCameraFileLauncher.launch(intent)
         }
+
+//        itemList = ArrayList()
+//        itemAdapter = ItemAdapter(requireContext(),itemList)
+//
+//        val inflter = LayoutInflater.from(requireContext())
+//        val v = inflter.inflate(R.layout.fragment_refrigerator,null)
+//
+//        v.mRecycler.layoutManager = LinearLayoutManager(requireContext())
+//        v.mRecycler.adapter = itemAdapter
+//
+//        binding.buttonAdd.setOnClickListener {
+//            val inflter = LayoutInflater.from(requireContext())
+//            val v = inflter.inflate(R.layout.add_item,null)
+//            /**set view*/
+////            val additemName = v.findViewById<EditText>(R.id.add_item_name)
+////            val additemvalid = v.findViewById<EditText>(R.id.add_item_valid)
+//            val names = binding.addItemName.text.toString()
+//            val number = binding.addItemValid.text.toString()
+//            itemList.add(ItemData("재료 이름 : $names","유통 기한 : $number"))
+//            itemAdapter.notifyDataSetChanged()
+//            Toast.makeText(requireContext(),"재료를 성공적으로 추가하였습니다", Toast.LENGTH_SHORT).show()
+//        }
 
     }
 

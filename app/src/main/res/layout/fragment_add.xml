@@ -55,6 +55,7 @@
             android:layout_height="300dp"
             tools:srcCompat="@tools:sample/avatars" />
 
+
         <EditText
             android:id="@+id/add_item_name"
             android:layout_width="match_parent"
@@ -86,6 +87,7 @@
             android:textColor="@color/purple_500"
             android:textSize="18sp"
             android:textStyle="bold" />
+
 
         <Button
             android:id="@+id/buttonAdd"
