@@ -44,9 +44,6 @@ class BagViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? { _binding = FragmentBagBinding.inflate(inflater, container, false)
-
-//            val view = binding.root
-//            return view
         return binding.root }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,9 +76,7 @@ class BagViewFragment : Fragment() {
             }
         }
 
-//        binding.addButton.setOnClickListener {
-//            addTask()
-//        }
+
 
         binding.urlButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://naver.com"))
@@ -89,13 +84,7 @@ class BagViewFragment : Fragment() {
         }
     }
 
-//    private fun addTask() {
-//        val todo = Todo(binding.editText.text.toString(),false)
-//        data.add(todo)
-//
-//        binding.recyclerView.adapter?.notifyDataSetChanged()
-//    }
-//
+
 //    private fun deleteTask(todo: Todo) {
 //        data.remove(todo)
 //
