@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -13,15 +14,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add.*
+import kotlinx.android.synthetic.main.fragment_bag.view.*
 import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.label.Category
 import org.tensorflow.lite.task.vision.detector.Detection
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
+import java.io.ByteArrayOutputStream
 
 
 import java.io.File
@@ -32,14 +38,11 @@ private var _binding: FragmentAddBinding? = null
 
 private val binding get() = _binding!!
 
-
-//lateinit var mainActivity: MainActivity
 private const val MAX_FONT_SIZE = 96F
 
 class AddFoodViewFragment : Fragment() {
 
     lateinit var filePath: String
-
 
 
 
@@ -67,28 +70,55 @@ class AddFoodViewFragment : Fragment() {
         val requestGalleryLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult())
         {
-            try {
-                // inSampleSize 비율 계산, 지정
-                val calRatio = calculateInSampleSize(
-                    it.data!!.data!!,
-                    resources.getDimensionPixelSize(R.dimen.imgSize),
-                    resources.getDimensionPixelSize(R.dimen.imgSize)
-                )
-                val option = BitmapFactory.Options()
-                option.inSampleSize = calRatio
-                // 이미지 로딩
-                var inputStream = mainActivity.contentResolver.openInputStream(it.data!!.data!!)
-                val bitmap = BitmapFactory.decodeStream(inputStream, null, option)
-                inputStream!!.close()
-                inputStream = null
-                bitmap?.let {
-//                    binding.imageView.setImageBitmap(bitmap)
-                    runObjectDetection(bitmap)
-                } ?: let {
-                    Log.d("kkang", "bitmap null")
+            val uri = it.data!!.data!!
+//            try {
+//                // inSampleSize 비율 계산, 지정
+//                val calRatio = calculateInSampleSize(
+//                    it.data!!.data!!,
+//                    resources.getDimensionPixelSize(R.dimen.imgWidthSize),
+//                    resources.getDimensionPixelSize(R.dimen.imgHeightSize)
+//                )
+//                val option = BitmapFactory.Options()
+//                option.inSampleSize = calRatio
+//                // 이미지 로딩
+                var inputStream = mainActivity.contentResolver.openInputStream(uri)
+//                val bitmap = BitmapFactory.decodeStream(inputStream, null, option)
+//                inputStream!!.close()
+//                inputStream = null
+//                bitmap?.let {
+////                    binding.imageView.setImageBitmap(bitmap)
+//                    runObjectDetection(bitmap)
+//                } ?: let {
+//                    Log.d("kkang", "bitmap null")
+//                }
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+
+
+            val ei = ExifInterface(inputStream!!)
+
+            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            val angle = when(orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                else -> 0f
+            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val source = ImageDecoder.createSource(mainActivity.contentResolver, uri)
+                ImageDecoder.decodeBitmap(source)?.let {
+                    val bitmap = resizeBitmap(it, 900f, 0f)
+                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                    runObjectDetection(btp)
+
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } else {
+                MediaStore.Images.Media.getBitmap(mainActivity.contentResolver, uri)?.let {
+                    val bitmap = resizeBitmap(it, 900f, 0f)
+                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                    runObjectDetection(btp)
+                }
             }
         }
         binding.btnGallary.setOnClickListener {
@@ -100,36 +130,40 @@ class AddFoodViewFragment : Fragment() {
             requestGalleryLauncher.launch(intent)
         }
 
-
+        //카메라후처리
         val requestCameraFileLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         )
         {
-            val calRatio = calculateInSampleSize(
-                Uri.fromFile(File(filePath)),
-                resources.getDimensionPixelSize(R.dimen.imgSize),
-                resources.getDimensionPixelSize(R.dimen.imgSize)
-            )
-            val option = BitmapFactory.Options()
-            option.inSampleSize = calRatio
-            val bitmap = BitmapFactory.decodeFile(filePath, option)
+            val ei = ExifInterface(filePath)
+            val file = File(filePath)
+            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+            val angle = when(orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                else -> 0f
+            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val source = ImageDecoder.createSource(mainActivity.contentResolver, Uri.fromFile(file))
+                ImageDecoder.decodeBitmap(source)?.let {
+                    val bitmap = resizeBitmap(it, 900f, 0f)
+                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                    runObjectDetection(btp)
 
-//            bitmap?.let {
-//                binding.imageView.setImageBitmap(bitmap)
-//            }
-            runObjectDetection(bitmap)
+                }
+            } else {
+                MediaStore.Images.Media.getBitmap(mainActivity.contentResolver, Uri.fromFile(file))?.let {
+                    val bitmap = resizeBitmap(it, 900f, 0f)
+                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                    runObjectDetection(btp)
+                }
+            }
+
         }
 
         binding.btnCamera.setOnClickListener {
-//            val timeStamp: String =
-//                SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-//            val storageDir: File? =
-//                mainActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-//            val file = File.createTempFile(
-//                "JPEG_${timeStamp}_",
-//                ".jpg",
-//                storageDir
-//            )
+
             val file = imageFile()
             filePath = file.absolutePath
             val photoURI: Uri = FileProvider.getUriForFile(
@@ -160,35 +194,6 @@ class AddFoodViewFragment : Fragment() {
     }
 
 
-    private fun calculateInSampleSize(fileUri: Uri, reqWidth: Int, reqHeight: Int): Int {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        try {
-            var inputStream = mainActivity.contentResolver.openInputStream(fileUri)
-
-            //inJustDecodeBounds 값을 true 로 설정한 상태에서 decodeXXX() 를 호출.
-            //로딩 하고자 하는 이미지의 각종 정보가 options 에 설정 된다.
-            BitmapFactory.decodeStream(inputStream, null, options)
-            inputStream!!.close()
-            inputStream = null
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        //비율 계산........................
-        val (height: Int, width: Int) = options.run { outHeight to outWidth }
-        var inSampleSize = 1
-        //inSampleSize 비율 계산
-        if (height > reqHeight || width > reqWidth) {
-
-            val halfHeight: Int = height / 2
-            val halfWidth: Int = width / 2
-
-            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
-                inSampleSize *= 2
-            }
-        }
-        return inSampleSize
-    }
 
     private fun runObjectDetection(bitmap: Bitmap) {
         // Step 1: Create TFLite's TensorImage object
@@ -212,20 +217,29 @@ class AddFoodViewFragment : Fragment() {
         val resultToDisplay = results.map {
             // Get the top-1 category and craft the display text
             val category = it.categories.first()
+
             val text = "${category.label}, ${category.score.times(100).toInt()}%"
 
+
+
             // Create a data object to display the detection result
-            DetectionResult(it.boundingBox, text)
+            DetectionResult(it.boundingBox, text, category)
         }
         // Draw the detection result on the bitmap and show it.
 
 
         val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
+
+//
+
+
         mainActivity.runOnUiThread {
 
             Glide.with(this).load(imgWithResult).into(binding.imageView)
         }
     }
+
+
     private fun drawDetectionResult(
         bitmap: Bitmap,
         detectionResults: List<DetectionResult>
@@ -233,6 +247,7 @@ class AddFoodViewFragment : Fragment() {
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
         val pen = Paint()
+        val listClass = mutableListOf<String>()
         pen.textAlign = Paint.Align.LEFT
 
         detectionResults.forEach {
@@ -263,14 +278,48 @@ class AddFoodViewFragment : Fragment() {
             canvas.drawText(
                 it.text, box.left + margin,
                 box.top + tagSize.height().times(1F), pen
+
             )
+            listClass.add(it.category.label)
         }
         return outputBitmap
     }
 
-    data class DetectionResult(val boundingBox: RectF, val text: String)
+    data class DetectionResult(val boundingBox: RectF, val text: String, val category: Category)
 
 
-
+    fun getImageUri(inContext: Context?, inImage: Bitmap?): Uri? {
+        val bytes = ByteArrayOutputStream()
+        if (inImage != null) {
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        }
+        val path = MediaStore.Images.Media.insertImage(
+            inContext?.getContentResolver(),
+            inImage,
+            "Title" + " - " + Calendar.getInstance().getTime(),
+            null
+        )
+        return Uri.parse(path)
+    }
+    private fun resizeBitmap(src: Bitmap, size: Float, angle: Float): Bitmap {
+        val width = src.width
+        val height = src.height
+        var newWidth = 0f
+        var newHeight = 0f
+        if(width > height) {
+            newWidth = size
+            newHeight = height.toFloat() * (newWidth / width.toFloat())
+        } else {
+            newHeight = size
+            newWidth = width.toFloat() * (newHeight / height.toFloat())
+        }
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+        val matrix = Matrix()
+        matrix.postRotate(angle);
+        matrix.postScale(scaleWidth, scaleHeight)
+        val resizedBitmap = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true)
+        return resizedBitmap
+    }
 }
 

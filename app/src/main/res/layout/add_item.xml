@@ -51,17 +51,9 @@
         <ImageView
             android:id="@+id/myimageView"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
+            android:layout_height="400dp"
             android:layout_marginBottom="16dp"
             tools:srcCompat="@tools:sample/avatars" />
-
-        <Button
-            android:id="@+id/btnObject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="48dp"
-            android:text="객체 인식" />
 
         <TextView
             android:text="재료를 추가하세요"
