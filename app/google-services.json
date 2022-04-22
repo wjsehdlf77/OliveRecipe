@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081904749455",
+    "project_id": "oliverecipe-test",
+    "storage_bucket": "oliverecipe-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081904749455:android:6195a110b3a13e540f49fa",
+        "android_client_info": {
+          "package_name": "com.example.oliverecipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081904749455-2m5tgnh4gi9voh5neo3ubp5ndqbrjpqb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6NlPicFBx0S9sjbKEDcv6VvOsnlJwpYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081904749455-2m5tgnh4gi9voh5neo3ubp5ndqbrjpqb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
