@@ -15,7 +15,14 @@
         android:id="@+id/action_refrigerator"
         android:name="com.example.oliverecipe.navigation.RefrigeratorViewFragment"
         android:label="나의 냉장고"
-        tools:layout="@layout/fragment_refrigerator" />
+        tools:layout="@layout/fragment_refrigerator" >
+        <action
+            android:id="@+id/action_action_refrigerator_to_myAddFragment"
+            app:destination="@id/myAddFragment" />
+        <action
+            android:id="@+id/action_action_refrigerator_to_updateFragment"
+            app:destination="@id/updateFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/action_foodbank"
@@ -46,4 +53,23 @@
         android:name="com.example.oliverecipe.navigation.MarketViewFragment"
         android:label="마켓으로 이동"
         tools:layout="@layout/fragment_market" />
+    <fragment
+        android:id="@+id/updateFragment"
+        android:name="com.example.oliverecipe.fragments.update.UpdateFragment"
+        android:label="UpdateFragment" >
+        <action
+            android:id="@+id/action_updateFragment_to_action_refrigerator"
+            app:destination="@id/action_refrigerator" />
+        <argument
+            android:name="currentUser"
+            app:argType="com.example.oliverecipe.model.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/myAddFragment"
+        android:name="com.example.oliverecipe.fragments.add.MyAddFragment"
+        android:label="MyAddFragment" >
+        <action
+            android:id="@+id/action_myAddFragment_to_action_refrigerator"
+            app:destination="@id/action_refrigerator" />
+    </fragment>
 </navigation>
