@@ -79,16 +79,16 @@ class RefrigeratorViewFragment : Fragment() {
 
     private fun deleteAllUsers() { //deleteUser를 만들어줬을때와 같이 dialog를 만들겠습니다.
         val builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yse"){ _, _ ->
+        builder.setPositiveButton("예"){ _, _ ->
             mUserViewModel.deleteAllUsers()
-            Toast.makeText(requireContext(),"Suscessfully removed everything ",
+            Toast.makeText(requireContext(),"삭제 완료",
                 Toast.LENGTH_SHORT).show()
         }
-        builder.setNegativeButton("No") { _, _ ->
+        builder.setNegativeButton("아니오") { _, _ ->
         }
 
-        builder.setTitle("Delete delete everything?")
-        builder.setMessage("Are you sure to delete everything?")
+        builder.setTitle("모든 재료 삭제")
+        builder.setMessage("모든 항목을 삭제하시겠습니까?")
         builder.create().show()
     }
 

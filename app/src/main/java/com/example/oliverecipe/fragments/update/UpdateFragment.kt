@@ -34,7 +34,7 @@ class UpdateFragment : Fragment() {
 
         //editText부분을 argument에서 받아온 값을 넣어줍니다.
         view.updateFirstName_et.setText(args.currentUser.firstName)
-        view.updateLastName_et.setText(args.currentUser.firstName)
+        view.updateLastName_et.setText(args.currentUser.lastName)
         view.updateAge_et.setText(args.currentUser.age.toString())
 
         view.update_button.setOnClickListener{
@@ -65,7 +65,7 @@ class UpdateFragment : Fragment() {
 
             mUserViewModel.updateUser(updatedUser)
 
-            Toast.makeText(requireContext(),"UpdatedSuccessfully",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"성공적으로 업데이트했습니다",Toast.LENGTH_SHORT).show()
 
             //navigate back
             findNavController().navigate(R.id.action_updateFragment_to_action_refrigerator)
@@ -73,7 +73,7 @@ class UpdateFragment : Fragment() {
         } else{
 
             //EditText가 빈칸이면 토스트 메세지
-            Toast.makeText(requireContext(),"Please fill out all field",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"빈 부분을 채워주세요",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,18 +98,18 @@ class UpdateFragment : Fragment() {
 
     private fun deleteUser(){ //delteIcon이 나오면 Dialog를 띄워서 물어보겠습니다.
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes"){ _, _ ->
+        builder.setPositiveButton(""){ _, _ ->
             //yes클릭시 viewMOdel.deleteUser를 실행시킵니다. args.currentUser를 삭제하게됩니다.
             mUserViewModel.deleteUser(args.currentUser)
-            Toast.makeText(requireContext(),"Suscessfully removed: ${args.currentUser.firstName}",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"삭제 완료: ${args.currentUser.firstName}",Toast.LENGTH_SHORT).show()
         }
-        builder.setNegativeButton("No") { _, _ ->
+        builder.setNegativeButton("아니오") { _, _ ->
             //아무일도 일어나지않습니다.
         }
 
         //dialog의 UI세팅입니다.
-        builder.setTitle("Delete ${args.currentUser.firstName}?")
-        builder.setMessage("Are you sure to delete ${args.currentUser.firstName}")
+        builder.setTitle("항목 삭제")
+        builder.setMessage("정말로 ${args.currentUser.firstName} 재료를 삭제하시겠습니까?")
 
         //dialog가 UI에 보여집니다.
         builder.create().show()

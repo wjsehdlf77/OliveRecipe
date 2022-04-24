@@ -31,7 +31,7 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         //UI와 전달받은 userList에 데이터베이스 데이터를 연결해줍니다.
         val currentItem = userList[position]
-        holder.itemView.id_txt.text = currentItem.id.toString()
+//        holder.itemView.id_txt.text = currentItem.id.toString()
         holder.itemView.firstName_txt.text = currentItem.firstName
         holder.itemView.lastName_txt.text = currentItem.lastName
         holder.itemView.age_txt.text = currentItem.age.toString()

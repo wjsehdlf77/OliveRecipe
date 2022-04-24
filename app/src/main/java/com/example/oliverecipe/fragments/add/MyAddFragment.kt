@@ -55,12 +55,12 @@ class MyAddFragment : Fragment() {
             mUserViewModel.addUser(user)
 
             //토스트 메세지입니다.
-            Toast.makeText(requireContext(),"Successfully added!", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
             //다시 listfragment로 돌려보냅니다.
             findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
         }else{
             //만약 유저가 editText모두 넣지 않았다면 토스트 메세지를 띄웁니다.
-            Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "빈 부분을 채워주세요", Toast.LENGTH_LONG).show()
         }
     }
 

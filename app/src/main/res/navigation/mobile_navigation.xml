@@ -46,7 +46,11 @@
         android:id="@+id/action_add"
         android:name="com.example.oliverecipe.navigation.AddFoodViewFragment"
         android:label="재료 추가"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_action_add_to_myAddFragment"
+            app:destination="@id/myAddFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/action_market"
