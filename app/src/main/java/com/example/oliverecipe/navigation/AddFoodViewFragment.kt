@@ -16,15 +16,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
 
-import com.squareup.picasso.Picasso
-
 import kotlinx.android.synthetic.main.fragment_add.*
+import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_bag.view.*
+import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
 import org.tensorflow.lite.task.vision.detector.Detection
@@ -55,6 +57,10 @@ class AddFoodViewFragment : Fragment() {
     ): View? {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        view.buttonAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_action_add_to_myAddFragment) //버튼을 누르면 addFragment로 화면전환합니다.
+        }
 
         return view
     }

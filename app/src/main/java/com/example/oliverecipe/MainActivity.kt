@@ -47,9 +47,7 @@ class MainActivity : AppCompatActivity()
 //            R.string.app_name,
 //            R.string.app_name)
 //        drawerToggle.syncState()
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        
 
         appBarConfiguration = AppBarConfiguration(
             setOf(

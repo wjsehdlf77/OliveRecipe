@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".refrigeratoritem.add.MyAddFragment">
+
+
+    <EditText
+        android:id="@+id/add_itemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:ems="10"
+        android:hint="재료 이름"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/add_itemProperty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="수량"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/add_itemName"
+        app:layout_constraintTop_toBottomOf="@+id/add_itemName" />
+
+    <EditText
+        android:id="@+id/add_validity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="유통 기한"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="@+id/add_itemProperty"
+        app:layout_constraintTop_toBottomOf="@+id/add_itemProperty" />
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="추가"
+        app:layout_constraintEnd_toEndOf="@+id/add_validity"
+        app:layout_constraintStart_toStartOf="@+id/add_validity"
+        app:layout_constraintTop_toBottomOf="@+id/add_validity" />
+</androidx.constraintlayout.widget.ConstraintLayout>
