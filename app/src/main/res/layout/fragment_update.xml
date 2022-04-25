@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:padding="24dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.update.UpdateFragment">
+    tools:context=".refrigeratoritem.update.UpdateFragment">
 
     <EditText
-        android:id="@+id/updateFirstName_et"
+        android:id="@+id/update_itemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
@@ -20,26 +20,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/updateLastName_et"
+        android:id="@+id/update_itemProperty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="수량"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/updateFirstName_et"
-        app:layout_constraintStart_toStartOf="@+id/updateFirstName_et"
-        app:layout_constraintTop_toBottomOf="@+id/updateFirstName_et" />
+        app:layout_constraintEnd_toEndOf="@+id/update_itemName"
+        app:layout_constraintStart_toStartOf="@+id/update_itemName"
+        app:layout_constraintTop_toBottomOf="@+id/update_itemName" />
 
     <EditText
-        android:id="@+id/updateAge_et"
+        android:id="@+id/update_validity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="유통 기한"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="@+id/updateLastName_et"
-        app:layout_constraintStart_toStartOf="@+id/updateLastName_et"
-        app:layout_constraintTop_toBottomOf="@+id/updateLastName_et" />
+        app:layout_constraintEnd_toEndOf="@+id/update_itemProperty"
+        app:layout_constraintStart_toStartOf="@+id/update_itemProperty"
+        app:layout_constraintTop_toBottomOf="@+id/update_itemProperty" />
 
     <Button
         android:id="@+id/update_button"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="업데이트"
-        app:layout_constraintEnd_toEndOf="@+id/updateAge_et"
-        app:layout_constraintStart_toStartOf="@+id/updateAge_et"
-        app:layout_constraintTop_toBottomOf="@+id/updateAge_et" />
+        app:layout_constraintEnd_toEndOf="@+id/update_validity"
+        app:layout_constraintStart_toStartOf="@+id/update_validity"
+        app:layout_constraintTop_toBottomOf="@+id/update_validity" />
 </androidx.constraintlayout.widget.ConstraintLayout>

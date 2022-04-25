@@ -59,18 +59,18 @@
         tools:layout="@layout/fragment_market" />
     <fragment
         android:id="@+id/updateFragment"
-        android:name="com.example.oliverecipe.fragments.update.UpdateFragment"
+        android:name="com.example.oliverecipe.refrigeratoritem.update.UpdateFragment"
         android:label="UpdateFragment" >
         <action
             android:id="@+id/action_updateFragment_to_action_refrigerator"
             app:destination="@id/action_refrigerator" />
         <argument
-            android:name="currentUser"
-            app:argType="com.example.oliverecipe.model.User" />
+            android:name="currentItem"
+            app:argType="com.example.oliverecipe.navigation.model.Item" />
     </fragment>
     <fragment
         android:id="@+id/myAddFragment"
-        android:name="com.example.oliverecipe.fragments.add.MyAddFragment"
+        android:name="com.example.oliverecipe.refrigeratoritem.add.MyAddFragment"
         android:label="MyAddFragment" >
         <action
             android:id="@+id/action_myAddFragment_to_action_refrigerator"
