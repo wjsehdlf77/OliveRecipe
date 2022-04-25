@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity()
 //            R.string.app_name,
 //            R.string.app_name)
 //        drawerToggle.syncState()
-        
+
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
