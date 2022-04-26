@@ -75,6 +75,10 @@ class oliveListAdapter (val rows: List<Row>)
             view.listCard.visibility = View.VISIBLE
         }
 
+        view.favorite.setOnClickListener{
+
+        }
+
 
         return ViewHolder(view)
     }

@@ -28,6 +28,7 @@ class FoodbankViewFragment : Fragment() {
         _binding = FragmentFoodbankBinding.inflate(inflater, container, false)
         return binding.root }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.areyclerView.layoutManager = LinearLayoutManager(context)
@@ -35,6 +36,7 @@ class FoodbankViewFragment : Fragment() {
         oliveData.getOliveData("토마토") {
         binding.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
         }
+
     }
 
 
