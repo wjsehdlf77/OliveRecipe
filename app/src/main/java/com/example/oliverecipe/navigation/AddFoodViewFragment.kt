@@ -7,7 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.provider.MediaStore
+import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +33,10 @@ import com.example.oliverecipe.navigation.model.DetectionResult
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_bag.*
 import kotlinx.android.synthetic.main.fragment_my_add.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 import org.tensorflow.lite.support.image.TensorImage
 
@@ -40,6 +46,10 @@ import org.tensorflow.lite.task.vision.detector.ObjectDetector
 
 
 import java.io.File
+import java.io.IOException
+import java.net.MalformedURLException
+import java.net.NoRouteToHostException
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -187,19 +197,18 @@ class AddFoodViewFragment : Fragment() {
             binding.imageView.visibility = View.VISIBLE
             val url = "http://172.30.1.22:8000/mjpeg/snapshot"
             try {
-
-
-                Glide.with(this)
-                    .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.imageView)
-
-
-            } catch (e: NoSuchElementException){
-                Toast.makeText(requireContext(),"연결 실패",Toast.LENGTH_SHORT).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        imageLoader.loadImage(url)
+                    }
+                    runObjectDetection(bitmap)
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(),"연결 오류",Toast.LENGTH_SHORT).show()
             }
         }
+
+
 
 
 //        itemList = ArrayList()
@@ -268,7 +277,7 @@ class AddFoodViewFragment : Fragment() {
             val category = it.categories.first()
 
             val text = "${category.label}"
-            
+
             // Create a data object to display the detection result
             DetectionResult(it.boundingBox, text, category)
         }
@@ -362,6 +371,17 @@ class AddFoodViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    object imageLoader {
+
+        suspend fun loadImage(imageUrl: String): Bitmap {
+
+            val url = URL(imageUrl)
+            val stream = url.openStream()
+
+            return BitmapFactory.decodeStream(stream)
+        }
     }
 }
 
