@@ -22,7 +22,7 @@
 
             <TextView
                 android:id="@+id/rName"
-                android:layout_width="258dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:padding="16dp"
@@ -37,6 +37,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right|end"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_favorite" />
 
         </LinearLayout>
 

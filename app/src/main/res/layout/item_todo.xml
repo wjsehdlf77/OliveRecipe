@@ -9,17 +9,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:text="살 식 재료"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/delete_image"
+        app:layout_constraintEnd_toStartOf="@+id/deleteImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="살 식 재료"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/delete_image"
+        android:id="@+id/deleteImage"
         android:layout_width="20dp"
         android:layout_height="23dp"
         android:layout_marginEnd="16dp"
