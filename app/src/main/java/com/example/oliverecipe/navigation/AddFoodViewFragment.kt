@@ -8,13 +8,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import androidx.exifinterface.media.ExifInterface
+
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -22,16 +22,18 @@ import com.bumptech.glide.Glide
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
+import com.example.oliverecipe.navigation.model.DetectionLabel
+import com.example.oliverecipe.navigation.model.DetectionResult
 
-import kotlinx.android.synthetic.main.fragment_add.*
+
 import kotlinx.android.synthetic.main.fragment_add.view.*
-import kotlinx.android.synthetic.main.fragment_bag.view.*
-import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
+import kotlinx.android.synthetic.main.fragment_bag.*
+import kotlinx.android.synthetic.main.fragment_my_add.*
+
 import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.label.Category
-import org.tensorflow.lite.task.vision.detector.Detection
+
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
-import java.io.ByteArrayOutputStream
+
 
 
 
@@ -45,10 +47,11 @@ private val binding get() = _binding!!
 
 private const val MAX_FONT_SIZE = 96F
 
+private val listItem = mutableListOf<String>()
+
 class AddFoodViewFragment : Fragment() {
 
     lateinit var filePath: String
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,8 +61,13 @@ class AddFoodViewFragment : Fragment() {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val view = binding.root
 
+
+
         view.buttonAdd.setOnClickListener {
+            val data = listItem.distinct()
+
             findNavController().navigate(R.id.action_action_add_to_myAddFragment) //버튼을 누르면 addFragment로 화면전환합니다.
+
         }
 
         return view
@@ -89,30 +97,19 @@ class AddFoodViewFragment : Fragment() {
 //                val option = BitmapFactory.Options()
 //                option.inSampleSize = calRatio
 //                // 이미지 로딩
-                var inputStream = mainActivity.contentResolver.openInputStream(uri)
-//                val bitmap = BitmapFactory.decodeStream(inputStream, null, option)
-//                inputStream!!.close()
-//                inputStream = null
-//                bitmap?.let {
-////                    binding.imageView.setImageBitmap(bitmap)
-//                    runObjectDetection(bitmap)
-//                } ?: let {
-//                    Log.d("kkang", "bitmap null")
-//                }
-//            } catch (e: Exception) {
-//                e.printStackTrace()
+//                var inputStream = mainActivity.contentResolver.openInputStream(uri)
+
+
+
+//            val ei = ExifInterface(inputStream!!)
+//
+//            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+//            val angle = when(orientation) {
+//                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+//                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+//                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+//                else -> 0f
 //            }
-
-
-            val ei = ExifInterface(inputStream!!)
-
-            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-            val angle = when(orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-                else -> 0f
-            }
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val source = ImageDecoder.createSource(mainActivity.contentResolver, uri)
                 ImageDecoder.decodeBitmap(source)?.let {
@@ -142,16 +139,16 @@ class AddFoodViewFragment : Fragment() {
         val requestCameraFileLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         )
-        {
-            val ei = ExifInterface(filePath)
+       {
+//            val ei = ExifInterface(filePath)
             val file = File(filePath)
-            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-            val angle = when(orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-                else -> 0f
-            }
+//            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+//            val angle = when(orientation) {
+//                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+//                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+//                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+//                else -> 0f
+//            }
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val source = ImageDecoder.createSource(mainActivity.contentResolver, Uri.fromFile(file))
                 ImageDecoder.decodeBitmap(source)?.let {
@@ -184,27 +181,6 @@ class AddFoodViewFragment : Fragment() {
             requestCameraFileLauncher.launch(intent)
         }
 
-//        itemList = ArrayList()
-//        itemAdapter = ItemAdapter(requireContext(),itemList)
-//
-//        val inflter = LayoutInflater.from(requireContext())
-//        val v = inflter.inflate(R.layout.fragment_refrigerator,null)
-//
-//        v.mRecycler.layoutManager = LinearLayoutManager(requireContext())
-//        v.mRecycler.adapter = itemAdapter
-//
-//        binding.buttonAdd.setOnClickListener {
-//            val inflter = LayoutInflater.from(requireContext())
-//            val v = inflter.inflate(R.layout.add_item,null)
-//            /**set view*/
-////            val additemName = v.findViewById<EditText>(R.id.add_item_name)
-////            val additemvalid = v.findViewById<EditText>(R.id.add_item_valid)
-//            val names = binding.addItemName.text.toString()
-//            val number = binding.addItemValid.text.toString()
-//            itemList.add(ItemData("재료 이름 : $names","유통 기한 : $number"))
-//            itemAdapter.notifyDataSetChanged()
-//            Toast.makeText(requireContext(),"재료를 성공적으로 추가하였습니다", Toast.LENGTH_SHORT).show()
-//        }
 
     }
 
@@ -248,8 +224,7 @@ class AddFoodViewFragment : Fragment() {
             // Get the top-1 category and craft the display text
             val category = it.categories.first()
 
-            val text = "${category.label}, ${category.score.times(100).toInt()}%"
-
+            val text = "${category.label}"
 
 
             // Create a data object to display the detection result
@@ -277,7 +252,7 @@ class AddFoodViewFragment : Fragment() {
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
         val pen = Paint()
-        val listClass = mutableListOf<String>()
+
         pen.textAlign = Paint.Align.LEFT
 
         detectionResults.forEach {
@@ -310,27 +285,17 @@ class AddFoodViewFragment : Fragment() {
                 box.top + tagSize.height().times(1F), pen
 
             )
-            listClass.add(it.category.label)
+
+            listItem.add(it.category.label)
+
+
+
         }
+
         return outputBitmap
     }
 
-    data class DetectionResult(val boundingBox: RectF, val text: String, val category: Category)
 
-
-    fun getImageUri(inContext: Context?, inImage: Bitmap?): Uri? {
-        val bytes = ByteArrayOutputStream()
-        if (inImage != null) {
-            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        }
-        val path = MediaStore.Images.Media.insertImage(
-            inContext?.getContentResolver(),
-            inImage,
-            "Title" + " - " + Calendar.getInstance().getTime(),
-            null
-        )
-        return Uri.parse(path)
-    }
     private fun resizeBitmap(src: Bitmap, size: Float, angle: Float): Bitmap {
         val width = src.width
         val height = src.height
