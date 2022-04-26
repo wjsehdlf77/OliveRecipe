@@ -12,12 +12,14 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
@@ -181,6 +183,47 @@ class AddFoodViewFragment : Fragment() {
             requestCameraFileLauncher.launch(intent)
         }
 
+        binding.btnRaspberry.setOnClickListener {
+            binding.imageView.visibility = View.VISIBLE
+            val url = "http://172.30.1.22:8000/mjpeg/snapshot"
+            try {
+
+
+                Glide.with(this)
+                    .load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.imageView)
+
+
+            } catch (e: NoSuchElementException){
+                Toast.makeText(requireContext(),"연결 실패",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+//        itemList = ArrayList()
+//        itemAdapter = ItemAdapter(requireContext(),itemList)
+//
+//        val inflter = LayoutInflater.from(requireContext())
+//        val v = inflter.inflate(R.layout.fragment_refrigerator,null)
+//
+//        v.mRecycler.layoutManager = LinearLayoutManager(requireContext())
+//        v.mRecycler.adapter = itemAdapter
+//
+//        binding.buttonAdd.setOnClickListener {
+//            val inflter = LayoutInflater.from(requireContext())
+//            val v = inflter.inflate(R.layout.add_item,null)
+//            /**set view*/
+////            val additemName = v.findViewById<EditText>(R.id.add_item_name)
+////            val additemvalid = v.findViewById<EditText>(R.id.add_item_valid)
+//            val names = binding.addItemName.text.toString()
+//            val number = binding.addItemValid.text.toString()
+//            itemList.add(ItemData("재료 이름 : $names","유통 기한 : $number"))
+//            itemAdapter.notifyDataSetChanged()
+//            Toast.makeText(requireContext(),"재료를 성공적으로 추가하였습니다", Toast.LENGTH_SHORT).show()
+//        }
+
 
     }
 
@@ -225,8 +268,7 @@ class AddFoodViewFragment : Fragment() {
             val category = it.categories.first()
 
             val text = "${category.label}"
-
-
+            
             // Create a data object to display the detection result
             DetectionResult(it.boundingBox, text, category)
         }
@@ -315,6 +357,11 @@ class AddFoodViewFragment : Fragment() {
         matrix.postScale(scaleWidth, scaleHeight)
         val resizedBitmap = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true)
         return resizedBitmap
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 
