@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.databinding.FragmentBagBinding
+import com.example.oliverecipe.databinding.ItemTodoBinding
 import com.example.oliverecipe.navigation.database.OliveRecipe
 import com.example.oliverecipe.navigation.database.OliveRecipeDatabase
 import com.example.oliverecipe.navigation.view.OliveRecipeAdapter
-
 
 
 class BagViewFragment : Fragment() {
@@ -23,6 +23,7 @@ class BagViewFragment : Fragment() {
     private var _binding: FragmentBagBinding? = null
     private val binding get() = _binding!!
     var helper: OliveRecipeDatabase?= null
+    private var mOliveRecipe: OliveRecipe? = null
 
 //    private lateinit var binding: FragmentBagBinding
 //    private val data = arrayListOf<Todo>()
@@ -43,7 +44,8 @@ class BagViewFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? { _binding = FragmentBagBinding.inflate(inflater, container, false)
+    ): View? {
+        _binding = FragmentBagBinding.inflate(inflater, container, false)
         return binding.root }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,11 +63,11 @@ class BagViewFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
 
+
         binding.addButton.setOnClickListener{
             if (binding.editText.text.toString().isNotEmpty()) {
                 val cart = OliveRecipe(
-                    binding.editText.text.toString(),
-                )
+                    binding.editText.text.toString())
                 helper?.oliveRecipeDao()?.insert(cart)
                 adapter.listData.clear()
                 adapter.listData.addAll(helper?.oliveRecipeDao()?.getAll() ?: listOf())
@@ -73,8 +75,9 @@ class BagViewFragment : Fragment() {
                 adapter.notifyDataSetChanged()
                 binding.editText.setText("")
 
-            }
-        }
+            } }
+
+
 
 
 
