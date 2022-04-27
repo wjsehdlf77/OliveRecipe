@@ -40,6 +40,7 @@ object oliveData{
                     if(response.isSuccessful){
                         val data = response.body()
                         callback(data!!) }
+
                 }
                 override fun onFailure(call: Call<oliverecipe>, t: Throwable){
                     Log.d("-----", t.toString())
