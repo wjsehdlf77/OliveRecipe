@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -27,6 +28,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
 import com.example.oliverecipe.MainActivity
@@ -35,12 +37,14 @@ import com.example.oliverecipe.databinding.FragmentAddBinding
 import com.example.oliverecipe.databinding.FragmentMyAddBinding
 
 import com.example.oliverecipe.navigation.model.DetectionResult
+import com.example.oliverecipe.navigation.view.oliveListAdapter
 import com.example.oliverecipe.refrigeratoritem.add.MyAddFragment
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.content_main.*
 
 
 import kotlinx.android.synthetic.main.fragment_add.view.*
+import kotlinx.android.synthetic.main.fragment_foodbank.view.*
 import kotlinx.android.synthetic.main.fragment_my_add.*
 
 import kotlinx.android.synthetic.main.fragment_my_add.view.*
@@ -108,8 +112,6 @@ class AddFoodViewFragment : Fragment() {
 
         binding.buttonAdd.setOnClickListener {
 
-
-
 //            val data = listItem.distinct().toString()
 
             val result = ItemName
@@ -119,7 +121,6 @@ class AddFoodViewFragment : Fragment() {
             findNavController().navigate(R.id.action_action_add_to_myAddFragment)  //버튼을 누르면 addFragment로 화면전환합니다.
 
         }
-
 
 
         val requestGalleryLauncher = registerForActivityResult(
@@ -143,7 +144,7 @@ class AddFoodViewFragment : Fragment() {
                         runObjectDetection(btp)
                     }
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -184,10 +185,16 @@ class AddFoodViewFragment : Fragment() {
                         ?.let {
                             val bitmap = resizeBitmap(it, 900f, 0f)
                             val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                            runObjectDetection(btp)
+                            val ingredient = runObjectDetection(btp)
+                            // api call
+                            oliveData.getOliveData("ingredient") {
+                                view.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
+//
+                            }
+//                            ingredient = runObjectDetection(btp)
                         }
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -218,163 +225,149 @@ class AddFoodViewFragment : Fragment() {
                     runObjectDetection(bitmap)
                 }
             } catch (e: Exception) {
-                Toast.makeText(requireContext(),"연결 오류",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "연결 오류", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-
-
+        private fun imageFile(): File {
+            val timeStamp: String =
+                SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            val storageDir: File? =
+                mainActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            var file = File.createTempFile(
+                "JPEG_${timeStamp}_",
+                ".jpg",
+                storageDir
+            )
+            return file
 
         }
 
-    }
 
-    private fun imageFile(): File {
-        val timeStamp: String =
-            SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File? =
-            mainActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        var file = File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
-        )
+        private fun runObjectDetection(bitmap: Bitmap): String {
+            // Step 1: Create TFLite's TensorImage object
+            val image = TensorImage.fromBitmap(bitmap)
 
-        return file
-
-    }
-
-
-    private fun runObjectDetection(bitmap: Bitmap) {
-        // Step 1: Create TFLite's TensorImage object
-        val image = TensorImage.fromBitmap(bitmap)
-
-        // Step 2: Initialize the detector object
-        val options = ObjectDetector.ObjectDetectorOptions.builder()
-            .setMaxResults(1)
-            .setScoreThreshold(0.8f)
-            .build()
-        val detector = ObjectDetector.createFromFileAndOptions(
-            mainActivity,
-            "model.tflite",
-            options
-        )
-
-        // Step 3: Feed given image to the detector
-        val results = detector.detect(image)
-
-        // Step 4: Parse the detection result and show it
-        val resultToDisplay = results.map {
-            // Get the top-1 category and craft the display text
-            val category = it.categories.first()
-
-            val text = "${category.label}"
-
-            // Create a data object to display the detection result
-            DetectionResult(it.boundingBox, text, category)
-        }
-        // Draw the detection result on the bitmap and show it.
-
-
-        val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
-
-//
-
-
-        mainActivity.runOnUiThread {
-
-            Glide.with(this).load(imgWithResult).into(binding.imageView)
-        }
-    }
-
-
-    private fun drawDetectionResult(
-        bitmap: Bitmap,
-        detectionResults: List<DetectionResult>
-    ): Bitmap {
-        val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(outputBitmap)
-        val pen = Paint()
-
-        pen.textAlign = Paint.Align.LEFT
-
-        detectionResults.forEach {
-            // draw bounding box
-            pen.color = Color.RED
-            pen.strokeWidth = 8F
-            pen.style = Paint.Style.STROKE
-            val box = it.boundingBox
-            canvas.drawRect(box, pen)
-
-
-            val tagSize = Rect(0, 0, 0, 0)
-
-            // calculate the right font size
-            pen.style = Paint.Style.FILL_AND_STROKE
-            pen.color = Color.YELLOW
-            pen.strokeWidth = 2F
-
-            pen.textSize = MAX_FONT_SIZE
-            pen.getTextBounds(it.text, 0, it.text.length, tagSize)
-            val fontSize: Float = pen.textSize * box.width() / tagSize.width()
-
-            // adjust the font size so texts are inside the bounding box
-            if (fontSize < pen.textSize) pen.textSize = fontSize
-
-            var margin = (box.width() - tagSize.width()) / 2.0F
-            if (margin < 0F) margin = 0F
-            canvas.drawText(
-                it.text, box.left + margin,
-                box.top + tagSize.height().times(1F), pen
-
+            // Step 2: Initialize the detector object
+            val options = ObjectDetector.ObjectDetectorOptions.builder()
+                .setMaxResults(1)
+                .setScoreThreshold(0.8f)
+                .build()
+            val detector = ObjectDetector.createFromFileAndOptions(
+                mainActivity,
+                "model.tflite",
+                options
             )
 
+            // Step 3: Feed given image to the detector
+            val results = detector.detect(image)
+
+            // Step 4: Parse the detection result and show it
+            val resultToDisplay = results.map {
+                // Get the top-1 category and craft the display text
+                val category = it.categories.first()
+
+                val text = "${category.label}"
+
+
+                // Create a data object to display the detection result
+                DetectionResult(it.boundingBox, text, category)
+            }
+            // Draw the detection result on the bitmap and show it.
+            val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
+            mainActivity.runOnUiThread {
+
+                Glide.with(this).load(imgWithResult).into(binding.imageView)
+            }
+            return results[0].categories[0].displayName
+        }
+
+        private fun drawDetectionResult(
+            bitmap: Bitmap,
+            detectionResults: List<DetectionResult>
+        ): Bitmap {
+            val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+            val canvas = Canvas(outputBitmap)
+            val pen = Paint()
+
+            pen.textAlign = Paint.Align.LEFT
+
+            detectionResults.forEach {
+                // draw bounding box
+                pen.color = Color.RED
+                pen.strokeWidth = 8F
+                pen.style = Paint.Style.STROKE
+                val box = it.boundingBox
+                canvas.drawRect(box, pen)
+
+
+                val tagSize = Rect(0, 0, 0, 0)
+
+                // calculate the right font size
+                pen.style = Paint.Style.FILL_AND_STROKE
+                pen.color = Color.YELLOW
+                pen.strokeWidth = 2F
+
+                pen.textSize = MAX_FONT_SIZE
+                pen.getTextBounds(it.text, 0, it.text.length, tagSize)
+                val fontSize: Float = pen.textSize * box.width() / tagSize.width()
+
+                // adjust the font size so texts are inside the bounding box
+                if (fontSize < pen.textSize) pen.textSize = fontSize
+
+                var margin = (box.width() - tagSize.width()) / 2.0F
+                if (margin < 0F) margin = 0F
+                canvas.drawText(
+                    it.text, box.left + margin,
+                    box.top + tagSize.height().times(1F), pen
+                )
 //            listItem.add(it.category.label)
-            ItemName = it.category.label
-
+                ItemName = it.category.label
+            }
+//        retrun ingredient
+            return outputBitmap
         }
 
-        return outputBitmap
-    }
 
-
-    private fun resizeBitmap(src: Bitmap, size: Float, angle: Float): Bitmap {
-        val width = src.width
-        val height = src.height
-        var newWidth = 0f
-        var newHeight = 0f
-        if (width > height) {
-            newWidth = size
-            newHeight = height.toFloat() * (newWidth / width.toFloat())
-        } else {
-            newHeight = size
-            newWidth = width.toFloat() * (newHeight / height.toFloat())
+        private fun resizeBitmap(src: Bitmap, size: Float, angle: Float): Bitmap {
+            val width = src.width
+            val height = src.height
+            var newWidth = 0f
+            var newHeight = 0f
+            if (width > height) {
+                newWidth = size
+                newHeight = height.toFloat() * (newWidth / width.toFloat())
+            } else {
+                newHeight = size
+                newWidth = width.toFloat() * (newHeight / height.toFloat())
+            }
+            val scaleWidth = newWidth.toFloat() / width
+            val scaleHeight = newHeight.toFloat() / height
+            val matrix = Matrix()
+            matrix.postRotate(angle);
+            matrix.postScale(scaleWidth, scaleHeight)
+            val resizedBitmap = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true)
+            return resizedBitmap
         }
-        val scaleWidth = newWidth.toFloat() / width
-        val scaleHeight = newHeight.toFloat() / height
-        val matrix = Matrix()
-        matrix.postRotate(angle);
-        matrix.postScale(scaleWidth, scaleHeight)
-        val resizedBitmap = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true)
-        return resizedBitmap
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+        override fun onDestroyView() {
+            super.onDestroyView()
+            _binding = null
+        }
 
-    object imageLoader {
+        object imageLoader {
 
-        suspend fun loadImage(imageUrl: String): Bitmap {
+            suspend fun loadImage(imageUrl: String): Bitmap {
 
 
-            val url = URL(imageUrl)
-            val stream = url.openStream()
+                val url = URL(imageUrl)
+                val stream = url.openStream()
 
-            return BitmapFactory.decodeStream(stream)
+                return BitmapFactory.decodeStream(stream)
 
+            }
         }
     }
-}
+
 

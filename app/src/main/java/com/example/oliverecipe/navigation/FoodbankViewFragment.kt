@@ -33,9 +33,9 @@ class FoodbankViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.areyclerView.layoutManager = LinearLayoutManager(context)
 
-        oliveData.getOliveData("토마토") {
-        binding.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
-        }
+//        oliveData.getOliveData("토마토") {
+//        binding.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
+//        }
 
     }
 

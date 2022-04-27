@@ -9,16 +9,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
 
 const val APPID="67a57680871e4140b78d"
+
 interface OliveDataService {
-        @GET("$APPID/COOKRCP01/json/1/5")
+    @GET("$APPID/COOKRCP01/json/1/5/RCP_PARTS_DTLS={VALUE}")
     fun getOliveData(
-            @Query("RCP_PARTS_DTLS") ingredient: String
-        ): Call<oliverecipe> }
+        @Path("VALUE") ingredient: String
+    ): Call<oliverecipe> }
 
 object oliveData{
     private val retrofit = Retrofit.Builder()
