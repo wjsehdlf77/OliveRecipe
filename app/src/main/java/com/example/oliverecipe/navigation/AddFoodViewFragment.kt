@@ -12,48 +12,71 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+
 
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentAddBinding
-import com.example.oliverecipe.navigation.model.DetectionLabel
+import com.example.oliverecipe.databinding.FragmentMyAddBinding
+
 import com.example.oliverecipe.navigation.model.DetectionResult
+import com.example.oliverecipe.refrigeratoritem.add.MyAddFragment
+import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.content_main.*
 
 
 import kotlinx.android.synthetic.main.fragment_add.view.*
-import kotlinx.android.synthetic.main.fragment_bag.*
 import kotlinx.android.synthetic.main.fragment_my_add.*
+import kotlinx.android.synthetic.main.fragment_my_add.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 import org.tensorflow.lite.support.image.TensorImage
 
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
-
-
+import org.w3c.dom.Text
+import retrofit2.http.Url
 
 
 import java.io.File
+import java.io.IOException
+import java.lang.Exception
+import java.net.MalformedURLException
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
 private var _binding: FragmentAddBinding? = null
-
 private val binding get() = _binding!!
 
-private const val MAX_FONT_SIZE = 96F
 
+
+private const val MAX_FONT_SIZE = 96F
 private val listItem = mutableListOf<String>()
+private val listgrade = mutableListOf<Float>()
+lateinit var ItemName:String
+
+
 
 class AddFoodViewFragment : Fragment() {
 
     lateinit var filePath: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,15 +85,6 @@ class AddFoodViewFragment : Fragment() {
     ): View? {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val view = binding.root
-
-
-
-        view.buttonAdd.setOnClickListener {
-            val data = listItem.distinct()
-
-            findNavController().navigate(R.id.action_action_add_to_myAddFragment) //버튼을 누르면 addFragment로 화면전환합니다.
-
-        }
 
         return view
     }
@@ -82,57 +96,57 @@ class AddFoodViewFragment : Fragment() {
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.buttonAdd.setOnClickListener {
+
+
+
+//            val data = listItem.distinct().toString()
+
+            val result = ItemName
+
+            setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+
+            findNavController().navigate(R.id.action_action_add_to_myAddFragment)  //버튼을 누르면 addFragment로 화면전환합니다.
+
+        }
+
+
+
         val requestGalleryLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult())
+            ActivityResultContracts.StartActivityForResult()
+        )
         {
-            val uri = it.data!!.data!!
-//            try {
-//                // inSampleSize 비율 계산, 지정
-//                val calRatio = calculateInSampleSize(
-//                    it.data!!.data!!,
-//                    resources.getDimensionPixelSize(R.dimen.imgWidthSize),
-//                    resources.getDimensionPixelSize(R.dimen.imgHeightSize)
-//                )
-//                val option = BitmapFactory.Options()
-//                option.inSampleSize = calRatio
-//                // 이미지 로딩
-//                var inputStream = mainActivity.contentResolver.openInputStream(uri)
+            try {
+                val uri = it.data!!.data!!
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val source = ImageDecoder.createSource(mainActivity.contentResolver, uri)
+                    ImageDecoder.decodeBitmap(source)?.let {
+                        val bitmap = resizeBitmap(it, 900f, 0f)
+                        val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                        runObjectDetection(btp)
 
-
-
-//            val ei = ExifInterface(inputStream!!)
-//
-//            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-//            val angle = when(orientation) {
-//                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-//                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-//                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-//                else -> 0f
-//            }
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val source = ImageDecoder.createSource(mainActivity.contentResolver, uri)
-                ImageDecoder.decodeBitmap(source)?.let {
-                    val bitmap = resizeBitmap(it, 900f, 0f)
-                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                    runObjectDetection(btp)
-
+                    }
+                } else {
+                    MediaStore.Images.Media.getBitmap(mainActivity.contentResolver, uri)?.let {
+                        val bitmap = resizeBitmap(it, 900f, 0f)
+                        val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                        runObjectDetection(btp)
+                    }
                 }
-            } else {
-                MediaStore.Images.Media.getBitmap(mainActivity.contentResolver, uri)?.let {
-                    val bitmap = resizeBitmap(it, 900f, 0f)
-                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                    runObjectDetection(btp)
-                }
+            } catch (e: Exception){
+                e.printStackTrace()
             }
         }
         binding.btnGallary.setOnClickListener {
             //gallery app........................
             val intent = Intent(
                 Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            )
             intent.type = "image/*"
             requestGalleryLauncher.launch(intent)
         }
@@ -141,32 +155,35 @@ class AddFoodViewFragment : Fragment() {
         val requestCameraFileLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         )
-       {
-//            val ei = ExifInterface(filePath)
-            val file = File(filePath)
-//            val orientation: Int = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-//            val angle = when(orientation) {
-//                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-//                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-//                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-//                else -> 0f
-//            }
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val source = ImageDecoder.createSource(mainActivity.contentResolver, Uri.fromFile(file))
-                ImageDecoder.decodeBitmap(source)?.let {
-                    val bitmap = resizeBitmap(it, 900f, 0f)
-                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                    runObjectDetection(btp)
+        {
+            try {
 
+
+                val file = File(filePath)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val source =
+                        ImageDecoder.createSource(mainActivity.contentResolver, Uri.fromFile(file))
+                    ImageDecoder.decodeBitmap(source)?.let {
+                        val bitmap = resizeBitmap(it, 900f, 0f)
+                        val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                        runObjectDetection(btp)
+
+                    }
+                } else {
+                    MediaStore.Images.Media.getBitmap(
+                        mainActivity.contentResolver,
+                        Uri.fromFile(file)
+                    )
+                        ?.let {
+                            val bitmap = resizeBitmap(it, 900f, 0f)
+                            val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                            runObjectDetection(btp)
+                        }
                 }
-            } else {
-                MediaStore.Images.Media.getBitmap(mainActivity.contentResolver, Uri.fromFile(file))?.let {
-                    val bitmap = resizeBitmap(it, 900f, 0f)
-                    val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                    runObjectDetection(btp)
-                }
+            } catch (e: Exception){
+                e.printStackTrace()
             }
-
         }
 
         binding.btnCamera.setOnClickListener {
@@ -186,48 +203,21 @@ class AddFoodViewFragment : Fragment() {
         binding.btnRaspberry.setOnClickListener {
             binding.imageView.visibility = View.VISIBLE
             val url = "http://172.30.1.22:8000/mjpeg/snapshot"
-            try {
 
+            CoroutineScope(Dispatchers.Main).launch {
+                val bitmap = withContext(Dispatchers.IO) {
+                    imageLoader.loadImage(url)
+                }
 
-                Glide.with(this)
-                    .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.imageView)
+                runObjectDetection(bitmap)
 
-
-            } catch (e: NoSuchElementException){
-                Toast.makeText(requireContext(),"연결 실패",Toast.LENGTH_SHORT).show()
             }
+
         }
-
-
-//        itemList = ArrayList()
-//        itemAdapter = ItemAdapter(requireContext(),itemList)
-//
-//        val inflter = LayoutInflater.from(requireContext())
-//        val v = inflter.inflate(R.layout.fragment_refrigerator,null)
-//
-//        v.mRecycler.layoutManager = LinearLayoutManager(requireContext())
-//        v.mRecycler.adapter = itemAdapter
-//
-//        binding.buttonAdd.setOnClickListener {
-//            val inflter = LayoutInflater.from(requireContext())
-//            val v = inflter.inflate(R.layout.add_item,null)
-//            /**set view*/
-////            val additemName = v.findViewById<EditText>(R.id.add_item_name)
-////            val additemvalid = v.findViewById<EditText>(R.id.add_item_valid)
-//            val names = binding.addItemName.text.toString()
-//            val number = binding.addItemValid.text.toString()
-//            itemList.add(ItemData("재료 이름 : $names","유통 기한 : $number"))
-//            itemAdapter.notifyDataSetChanged()
-//            Toast.makeText(requireContext(),"재료를 성공적으로 추가하였습니다", Toast.LENGTH_SHORT).show()
-//        }
-
 
     }
 
-    private fun imageFile() :File {
+    private fun imageFile(): File {
         val timeStamp: String =
             SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? =
@@ -243,15 +233,14 @@ class AddFoodViewFragment : Fragment() {
     }
 
 
-
     private fun runObjectDetection(bitmap: Bitmap) {
         // Step 1: Create TFLite's TensorImage object
         val image = TensorImage.fromBitmap(bitmap)
 
         // Step 2: Initialize the detector object
         val options = ObjectDetector.ObjectDetectorOptions.builder()
-            .setMaxResults(5)
-            .setScoreThreshold(0.3f)
+            .setMaxResults(1)
+            .setScoreThreshold(0.8f)
             .build()
         val detector = ObjectDetector.createFromFileAndOptions(
             mainActivity,
@@ -268,7 +257,7 @@ class AddFoodViewFragment : Fragment() {
             val category = it.categories.first()
 
             val text = "${category.label}"
-            
+
             // Create a data object to display the detection result
             DetectionResult(it.boundingBox, text, category)
         }
@@ -328,9 +317,8 @@ class AddFoodViewFragment : Fragment() {
 
             )
 
-            listItem.add(it.category.label)
-
-
+//            listItem.add(it.category.label)
+            ItemName = it.category.label
 
         }
 
@@ -343,7 +331,7 @@ class AddFoodViewFragment : Fragment() {
         val height = src.height
         var newWidth = 0f
         var newHeight = 0f
-        if(width > height) {
+        if (width > height) {
             newWidth = size
             newHeight = height.toFloat() * (newWidth / width.toFloat())
         } else {
@@ -362,6 +350,24 @@ class AddFoodViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    object imageLoader {
+
+        suspend fun loadImage(imageUrl: String): Bitmap {
+//            val bmp: Bitmap? = null
+//            try {
+                val url = URL(imageUrl)
+                val stream = url.openStream()
+
+                return BitmapFactory.decodeStream(stream)
+//            } catch (e: MalformedURLException) {
+//                e.printStackTrace()
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+
+        }
     }
 }
 
