@@ -35,12 +35,14 @@ import com.example.oliverecipe.databinding.FragmentAddBinding
 import com.example.oliverecipe.databinding.FragmentMyAddBinding
 
 import com.example.oliverecipe.navigation.model.DetectionResult
+import com.example.oliverecipe.navigation.view.oliveListAdapter
 import com.example.oliverecipe.refrigeratoritem.add.MyAddFragment
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.content_main.*
 
 
 import kotlinx.android.synthetic.main.fragment_add.view.*
+import kotlinx.android.synthetic.main.fragment_foodbank.view.*
 import kotlinx.android.synthetic.main.fragment_my_add.*
 
 import kotlinx.android.synthetic.main.fragment_my_add.view.*
@@ -184,7 +186,13 @@ class AddFoodViewFragment : Fragment() {
                         ?.let {
                             val bitmap = resizeBitmap(it, 900f, 0f)
                             val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                            runObjectDetection(btp)
+                            val ingredient = runObjectDetection(btp)
+                            // api call
+                            oliveData.getOliveData("ingredient") {
+                                view.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
+//
+                            }
+//                            ingredient = runObjectDetection(btp)
                         }
                 }
             } catch (e: Exception){
@@ -221,13 +229,8 @@ class AddFoodViewFragment : Fragment() {
                 Toast.makeText(requireContext(),"연결 오류",Toast.LENGTH_SHORT).show()
             }
         }
-
-
-
-
         }
 
-    }
 
     private fun imageFile(): File {
         val timeStamp: String =
@@ -239,13 +242,12 @@ class AddFoodViewFragment : Fragment() {
             ".jpg",
             storageDir
         )
-
         return file
 
     }
 
 
-    private fun runObjectDetection(bitmap: Bitmap) {
+    private fun runObjectDetection(bitmap: Bitmap): String{
         // Step 1: Create TFLite's TensorImage object
         val image = TensorImage.fromBitmap(bitmap)
 
@@ -274,24 +276,17 @@ class AddFoodViewFragment : Fragment() {
             DetectionResult(it.boundingBox, text, category)
         }
         // Draw the detection result on the bitmap and show it.
-
-
         val imgWithResult = drawDetectionResult(bitmap, resultToDisplay)
-
-//
-
-
         mainActivity.runOnUiThread {
 
             Glide.with(this).load(imgWithResult).into(binding.imageView)
         }
+        return results[0].categories[0].displayName
     }
-
-
     private fun drawDetectionResult(
-        bitmap: Bitmap,
+       bitmap: Bitmap,
         detectionResults: List<DetectionResult>
-    ): Bitmap {
+    ): Bitmap{
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
         val pen = Paint()
@@ -326,14 +321,11 @@ class AddFoodViewFragment : Fragment() {
             canvas.drawText(
                 it.text, box.left + margin,
                 box.top + tagSize.height().times(1F), pen
-
             )
-
 //            listItem.add(it.category.label)
             ItemName = it.category.label
-
         }
-
+//        retrun ingredient
         return outputBitmap
     }
 
@@ -358,12 +350,10 @@ class AddFoodViewFragment : Fragment() {
         val resizedBitmap = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true)
         return resizedBitmap
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
     object imageLoader {
 
         suspend fun loadImage(imageUrl: String): Bitmap {

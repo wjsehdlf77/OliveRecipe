@@ -34,6 +34,8 @@ class UpdateFragment : Fragment() {
 
         view.update_itemName.setText(args.currentItem.itemName)
         view.update_itemProperty.setText(args.currentItem.itemProperty)
+        // api
+
         view.update_validity.setText(args.currentItem.validity.toString())
 
         view.update_button.setOnClickListener{

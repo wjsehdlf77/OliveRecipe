@@ -79,6 +79,7 @@ class oliveListAdapter (val rows: List<Row>)
 
         }
 
+        //MQTT publish를 여기서 한다. -> 라즈베리 파이에서 서브스크라이브
 
         return ViewHolder(view)
     }
