@@ -13,12 +13,14 @@ import kotlinx.coroutines.launch
 class ItemViewModel(application: Application): AndroidViewModel(application) {
 
     val readAllData: LiveData<List<Item>>
+    val recentName: LiveData<List<Item>>
     private val repository: ItemRepository
 
     init {
         val itemDao = ItemDatabase.getDatabase(application).itemDao()
         repository = ItemRepository(itemDao)
         readAllData = repository.readAllData
+        recentName = repository.recentName
     }
 
     fun addItem(item: Item){// 파라미터에 만든 데이터클래스가 들어갑니다.
@@ -45,5 +47,6 @@ class ItemViewModel(application: Application): AndroidViewModel(application) {
 
         }
     }
+
 
 }

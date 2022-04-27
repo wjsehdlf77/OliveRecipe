@@ -21,4 +21,8 @@ interface ItemDao {
 
     @Query("SELECT * FROM item_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<Item>>
+
+    @Query("SELECT * FROM item_table ORDER BY id DESC LIMIT 1")
+    fun recentName(): LiveData<List<Item>>
+
 }
