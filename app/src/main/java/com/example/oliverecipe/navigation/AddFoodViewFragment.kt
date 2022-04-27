@@ -214,19 +214,24 @@ class AddFoodViewFragment : Fragment() {
         }
 
         binding.btnRaspberry.setOnClickListener {
+
             binding.imageView.visibility = View.VISIBLE
             val url = "http://172.30.1.22:8000/mjpeg/snapshot"
 
-            try {
+
                 CoroutineScope(Dispatchers.Main).launch {
-                    val bitmap = withContext(Dispatchers.IO) {
-                        imageLoader.loadImage(url)
+                    try {
+                        val bitmap = withContext(Dispatchers.IO) {
+                            imageLoader.loadImage(url)
+                        }
+                        runObjectDetection(bitmap)
+                    } catch (e: Exception) {
+
+                        e.printStackTrace()
+                        Toast.makeText(requireContext(), "연결 오류", Toast.LENGTH_SHORT).show()
                     }
-                    runObjectDetection(bitmap)
+
                 }
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "연결 오류", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
