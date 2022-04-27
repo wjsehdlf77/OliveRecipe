@@ -7,7 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.provider.MediaStore
+import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +42,9 @@ import kotlinx.android.synthetic.main.content_main.*
 
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_my_add.*
+
 import kotlinx.android.synthetic.main.fragment_my_add.view.*
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,8 +59,10 @@ import retrofit2.http.Url
 
 import java.io.File
 import java.io.IOException
+
 import java.lang.Exception
 import java.net.MalformedURLException
+
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
@@ -204,14 +210,20 @@ class AddFoodViewFragment : Fragment() {
             binding.imageView.visibility = View.VISIBLE
             val url = "http://172.30.1.22:8000/mjpeg/snapshot"
 
-            CoroutineScope(Dispatchers.Main).launch {
-                val bitmap = withContext(Dispatchers.IO) {
-                    imageLoader.loadImage(url)
+            try {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        imageLoader.loadImage(url)
+                    }
+                    runObjectDetection(bitmap)
                 }
-
-                runObjectDetection(bitmap)
-
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(),"연결 오류",Toast.LENGTH_SHORT).show()
             }
+        }
+
+
+
 
         }
 
@@ -355,17 +367,12 @@ class AddFoodViewFragment : Fragment() {
     object imageLoader {
 
         suspend fun loadImage(imageUrl: String): Bitmap {
-//            val bmp: Bitmap? = null
-//            try {
-                val url = URL(imageUrl)
-                val stream = url.openStream()
 
-                return BitmapFactory.decodeStream(stream)
-//            } catch (e: MalformedURLException) {
-//                e.printStackTrace()
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
+
+            val url = URL(imageUrl)
+            val stream = url.openStream()
+
+            return BitmapFactory.decodeStream(stream)
 
         }
     }
