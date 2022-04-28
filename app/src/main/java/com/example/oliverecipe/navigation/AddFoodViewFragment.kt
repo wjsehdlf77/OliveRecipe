@@ -116,9 +116,14 @@ class AddFoodViewFragment : Fragment() {
 
             val result = ItemName
 
-            setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+            if (result != null) {
 
-            findNavController().navigate(R.id.action_action_add_to_myAddFragment)  //버튼을 누르면 addFragment로 화면전환합니다.
+                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+
+                findNavController().navigate(R.id.action_action_add_to_myAddFragment)  //버튼을 누르면 addFragment로 화면전환합니다.
+            } else {
+                Toast.makeText(mainActivity, "물체가 감지되지 않았습니다", Toast.LENGTH_SHORT).show()
+            }
 
         }
 

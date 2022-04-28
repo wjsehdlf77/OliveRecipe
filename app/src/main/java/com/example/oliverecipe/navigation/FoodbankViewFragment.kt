@@ -7,21 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.oliverecipe.MainActivity
-import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentFoodbankBinding
 import com.example.oliverecipe.navigation.view.oliveListAdapter
-import com.example.oliverecipe.refrigeratoritem.list.ListAdapter
-import com.example.oliverecipe.refrigeratoritem.update.UpdateFragmentArgs
 import com.example.oliverecipe.refrigeratoritem.viewmodel.ItemViewModel
-import kotlinx.android.synthetic.main.custom_row.*
-import kotlinx.android.synthetic.main.fragment_my_add.*
-import kotlinx.android.synthetic.main.fragment_update.*
-import kotlinx.android.synthetic.main.fragment_update.view.*
+import java.lang.Exception
+
 
 class FoodbankViewFragment : Fragment() {
 
@@ -55,8 +48,13 @@ class FoodbankViewFragment : Fragment() {
         binding.areyclerView.layoutManager = LinearLayoutManager(context)
 
         mItemViewModel.recentName.observe(viewLifecycleOwner) { item ->
-            oliveData.getOliveData(item[0].itemName) {
-                binding.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
+
+            try {
+                oliveData.getOliveData(item[0].itemName) {
+                    binding.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
+                }
+            } catch (e:Exception) {
+                e.printStackTrace()
             }
         }
 
