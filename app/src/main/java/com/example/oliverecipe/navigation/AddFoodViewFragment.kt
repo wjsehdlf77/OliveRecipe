@@ -79,7 +79,8 @@ private val binding get() = _binding!!
 private const val MAX_FONT_SIZE = 96F
 private val listItem = mutableListOf<String>()
 private val listgrade = mutableListOf<Float>()
-lateinit var ItemName:String
+
+private var ItemName:String? = null
 
 
 
@@ -114,15 +115,14 @@ class AddFoodViewFragment : Fragment() {
 
 //            val data = listItem.distinct().toString()
 
-            val result = ItemName
+            val result:String? = ItemName
 
             if (result != null) {
-
                 setFragmentResult("requestKey", bundleOf("bundleKey" to result))
 
                 findNavController().navigate(R.id.action_action_add_to_myAddFragment)  //버튼을 누르면 addFragment로 화면전환합니다.
             } else {
-                Toast.makeText(mainActivity, "물체가 감지되지 않았습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mainActivity, "추가할 재료가 없습니다", Toast.LENGTH_SHORT).show()
             }
 
         }
