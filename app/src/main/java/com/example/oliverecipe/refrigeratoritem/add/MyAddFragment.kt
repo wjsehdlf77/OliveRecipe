@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
 class MyAddFragment : Fragment() {
     // view model initialize
     private lateinit var mItemViewModel: ItemViewModel
-    private var data = ArrayList<String>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,6 +41,7 @@ class MyAddFragment : Fragment() {
             insertDataToDatabase4()
             Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
             findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+
         }
 
         return view
@@ -80,7 +80,7 @@ class MyAddFragment : Fragment() {
             } else if (arraySize == 1) {
                 add_itemName0.setText(result?.get(0) ?:"")
         }
-
+        result?.clear()
 
         }
 

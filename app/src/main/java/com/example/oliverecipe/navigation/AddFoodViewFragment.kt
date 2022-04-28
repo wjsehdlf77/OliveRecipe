@@ -359,7 +359,9 @@ class AddFoodViewFragment : Fragment() {
 
         override fun onDestroyView() {
             super.onDestroyView()
+            listItem.clear()
             _binding = null
+
         }
 
         object imageLoader {
