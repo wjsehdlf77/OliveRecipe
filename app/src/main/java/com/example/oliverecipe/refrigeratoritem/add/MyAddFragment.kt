@@ -19,11 +19,14 @@ import com.example.oliverecipe.refrigeratoritem.viewmodel.ItemViewModel
 import kotlinx.android.synthetic.main.fragment_my_add.*
 import kotlinx.android.synthetic.main.fragment_my_add.view.*
 import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
+import java.lang.Exception
 
 
 class MyAddFragment : Fragment() {
     // view model initialize
     private lateinit var mItemViewModel: ItemViewModel
+
+    private var arraySize: Int? = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,14 +37,8 @@ class MyAddFragment : Fragment() {
 
 
         view.add_button.setOnClickListener{
-            insertDataToDatabase0()
-            insertDataToDatabase1()
-            insertDataToDatabase2()
-            insertDataToDatabase3()
-            insertDataToDatabase4()
-            Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
-            findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
 
+                insertDataToDatabase0()
         }
 
         return view
@@ -56,31 +53,33 @@ class MyAddFragment : Fragment() {
             // Do something with the result...
             //add_itemName.setText(result)
 
-            val arraySize = result?.size
+
+
+            arraySize = result?.size
             if (arraySize == 5) {
-                add_itemName0.setText(result?.get(0) ?:"")
-                add_itemName1.setText(result?.get(1) ?: "")
-                add_itemName2.setText(result?.get(2) ?: "")
-                add_itemName3.setText(result?.get(3) ?: "")
-                add_itemName4.setText(result?.get(4) ?: "")
+                add_itemName0.setText(result?.get(0))
+                add_itemName1.setText(result?.get(1))
+                add_itemName2.setText(result?.get(2))
+                add_itemName3.setText(result?.get(3))
+                add_itemName4.setText(result?.get(4))
             } else if (arraySize == 4) {
-                add_itemName0.setText(result?.get(0) ?:"")
-                add_itemName1.setText(result?.get(1) ?: "")
-                add_itemName2.setText(result?.get(2) ?: "")
-                add_itemName3.setText(result?.get(3) ?: "")
+                add_itemName0.setText(result?.get(0))
+                add_itemName1.setText(result?.get(1))
+                add_itemName2.setText(result?.get(2))
+                add_itemName3.setText(result?.get(3))
 
             } else if (arraySize == 3) {
-                add_itemName0.setText(result?.get(0) ?:"")
-                add_itemName1.setText(result?.get(1) ?: "")
-                add_itemName2.setText(result?.get(2) ?: "")
+                add_itemName0.setText(result?.get(0))
+                add_itemName1.setText(result?.get(1))
+                add_itemName2.setText(result?.get(2))
             } else if (arraySize == 2) {
-                add_itemName0.setText(result?.get(0) ?:"")
-                add_itemName1.setText(result?.get(1) ?: "")
+                add_itemName0.setText(result?.get(0))
+                add_itemName1.setText(result?.get(1))
 
             } else if (arraySize == 1) {
-                add_itemName0.setText(result?.get(0) ?:"")
+                add_itemName0.setText(result?.get(0))
         }
-        result?.clear()
+            result?.clear()
 
         }
 
@@ -100,10 +99,16 @@ class MyAddFragment : Fragment() {
             val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
             mItemViewModel.addItem(user)
+            if (arraySize != 1) {
+                insertDataToDatabase1()
 
+            } else {
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            }
         }else{
+            Toast.makeText(requireContext(),"첫째줄이 비었습니다", Toast.LENGTH_SHORT).show()
 
-            Toast.makeText(requireContext(), "빈 부분을 채워주세요", Toast.LENGTH_LONG).show()
         }
     }
     private fun insertDataToDatabase1() {
@@ -118,11 +123,16 @@ class MyAddFragment : Fragment() {
             val user = Item(0, itemName, itemProperty, Integer.parseInt(validity.toString()))
 
             mItemViewModel.addItem(user)
+            if (arraySize != 2) {
+                insertDataToDatabase2()
 
-
+            } else {
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            }
 
         } else {
-
+            Toast.makeText(requireContext(),"둘째줄이 비었습니다", Toast.LENGTH_SHORT).show()
 
         }
     }
@@ -138,8 +148,16 @@ class MyAddFragment : Fragment() {
             val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
             mItemViewModel.addItem(user)
+            if (arraySize != 3) {
+                insertDataToDatabase3()
+
+            } else {
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            }
 
         }else{
+            Toast.makeText(requireContext(),"셋째줄이 비었습니다", Toast.LENGTH_SHORT).show()
 
         }
     }
@@ -155,10 +173,15 @@ class MyAddFragment : Fragment() {
             val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
             mItemViewModel.addItem(user)
+            if (arraySize != 4) {
+                insertDataToDatabase4()
 
-
+            } else {
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            }
         }else{
-
+            Toast.makeText(requireContext(),"넷째줄이 비었습니다", Toast.LENGTH_SHORT).show()
         }
     }
     private fun insertDataToDatabase4() {
@@ -175,13 +198,21 @@ class MyAddFragment : Fragment() {
             mItemViewModel.addItem(user)
 
         }else{
-
+            Toast.makeText(requireContext(),"다섯째줄이 비었습니다", Toast.LENGTH_SHORT).show()
         }
     }
 
     //텍스트 박스가 비어있는지 확인
-    private fun inputCheck(firstName:String, lastName:String, age: Editable):Boolean{
-        return !(TextUtils.isEmpty(firstName)&&TextUtils.isEmpty(lastName)&& age.isEmpty())
+    private fun inputCheck(label:String, property:String, vality: Editable):Boolean{
+        if (TextUtils.isEmpty(label)) {
+            return false
+        } else if (TextUtils.isEmpty(property)) {
+            return false
+        } else if (TextUtils.isEmpty(vality)) {
+            return false
+        }
+        return true
+
     }
 
 }

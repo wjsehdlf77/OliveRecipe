@@ -72,6 +72,7 @@ class FoodbankViewFragment : Fragment() {
                     binding.areyclerView.adapter = oliveListAdapter(result!!)
                 }
             }
+
             asyncTask.execute(item)
         })
     }
