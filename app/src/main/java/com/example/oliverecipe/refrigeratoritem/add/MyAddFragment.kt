@@ -27,6 +27,20 @@ class MyAddFragment : Fragment() {
     private lateinit var mItemViewModel: ItemViewModel
 
     private var arraySize: Int? = 0
+
+    private  var user0: Item? = null
+    private  var user1: Item? = null
+    private  var user2: Item? = null
+    private  var user3: Item? = null
+    private  var user4: Item? = null
+
+    private var save0: Boolean = false
+    private var save1: Boolean = false
+    private var save2: Boolean = false
+    private var save3: Boolean = false
+    private var save4: Boolean = false
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +52,41 @@ class MyAddFragment : Fragment() {
 
         view.add_button.setOnClickListener{
 
-                insertDataToDatabase0()
+            insertDataToDatabase0()
+            if (save0) {
+                mItemViewModel.addItem(user0)
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            } else if(save1) {
+                mItemViewModel.addItem(user0)
+                mItemViewModel.addItem((user1))
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            } else if(save2) {
+                mItemViewModel.addItem(user0)
+                mItemViewModel.addItem(user1)
+                mItemViewModel.addItem(user2)
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            } else if(save3) {
+                mItemViewModel.addItem(user0)
+                mItemViewModel.addItem(user1)
+                mItemViewModel.addItem(user2)
+                mItemViewModel.addItem(user3)
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            } else if(save4) {
+                mItemViewModel.addItem(user0)
+                mItemViewModel.addItem(user1)
+                mItemViewModel.addItem(user2)
+                mItemViewModel.addItem(user3)
+                mItemViewModel.addItem(user4)
+                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+            }
+
+
+
         }
 
         return view
@@ -96,15 +144,14 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user0 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
-            mItemViewModel.addItem(user)
+
             if (arraySize != 1) {
                 insertDataToDatabase1()
 
             } else {
-                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+                save0 = true
             }
         }else{
             Toast.makeText(requireContext(),"첫째줄이 비었습니다", Toast.LENGTH_SHORT).show()
@@ -120,15 +167,13 @@ class MyAddFragment : Fragment() {
         if (inputCheck(itemName, itemProperty, validity)) {
             // user object를 db에 전송
 
-            val user = Item(0, itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user1 = Item(0, itemName, itemProperty, Integer.parseInt(validity.toString()))
 
-            mItemViewModel.addItem(user)
             if (arraySize != 2) {
                 insertDataToDatabase2()
 
             } else {
-                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+                save1 = true
             }
 
         } else {
@@ -145,15 +190,13 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user2 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
-            mItemViewModel.addItem(user)
             if (arraySize != 3) {
                 insertDataToDatabase3()
 
             } else {
-                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+                save2 = true
             }
 
         }else{
@@ -170,15 +213,13 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user3 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
-            mItemViewModel.addItem(user)
             if (arraySize != 4) {
                 insertDataToDatabase4()
 
             } else {
-                Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_myAddFragment_to_action_refrigerator)
+                save3 = true
             }
         }else{
             Toast.makeText(requireContext(),"넷째줄이 비었습니다", Toast.LENGTH_SHORT).show()
@@ -193,9 +234,10 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            val user = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user4 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
 
-            mItemViewModel.addItem(user)
+            save4 = true
+
 
         }else{
             Toast.makeText(requireContext(),"다섯째줄이 비었습니다", Toast.LENGTH_SHORT).show()

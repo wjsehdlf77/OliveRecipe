@@ -8,7 +8,7 @@ class ItemRepository(private val itemDao: ItemDao) {
     val readAllData: LiveData<List<Item>> = itemDao.readAllData()
     val recentName: LiveData<List<Item>> = itemDao.recentName()
 
-    fun addItem(item: Item){
+    fun addItem(item: Item?){
         itemDao.addItem(item)
     }
 
