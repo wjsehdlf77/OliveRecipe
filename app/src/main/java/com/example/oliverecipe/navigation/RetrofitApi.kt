@@ -30,24 +30,8 @@ object oliveData{
 
     val service = retrofit.create(OliveDataService::class.java)
 
-    fun getOliveData(ingredient: String, callback:(oliverecipe) -> Unit ){
-        service.getOliveData(ingredient)
-            .enqueue(object : Callback<oliverecipe>{
-
-                override fun onResponse(
-                    call: Call<oliverecipe>,
-                    response: Response<oliverecipe>)
-                {
-//                    Log.i("URL", call.request().url.toString())
-                    if(response.isSuccessful){
-                        val data = response.body()
-                        callback(data!!) }
-
-                }
-                override fun onFailure(call: Call<oliverecipe>, t: Throwable){
-                    Log.d("-----", t.toString())
-                }
-            })
+    fun getOliveData(ingredient: String): oliverecipe {
+        return service.getOliveData(ingredient).execute().body()!!
     }
 }
 
