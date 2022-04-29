@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".refrigeratoritem.floatingadd.FloatingAddFragment">
+
+    <EditText
+        android:id="@+id/floating_itemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:ems="10"
+        android:hint="재료 이름"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/floating_itemProperty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="수량"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/floating_itemName"
+        app:layout_constraintStart_toStartOf="@+id/floating_itemName"
+        app:layout_constraintTop_toBottomOf="@+id/floating_itemName" />
+
+    <EditText
+        android:id="@+id/floating_validity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="유통 기한"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/floating_itemProperty"
+        app:layout_constraintStart_toStartOf="@+id/floating_itemProperty"
+        app:layout_constraintTop_toBottomOf="@+id/floating_itemProperty" />
+
+    <Button
+        android:id="@+id/floating_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="추가"
+        app:layout_constraintEnd_toEndOf="@+id/floating_validity"
+        app:layout_constraintStart_toStartOf="@+id/floating_validity"
+        app:layout_constraintTop_toBottomOf="@+id/floating_validity" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,7 +52,7 @@ class RefrigeratorViewFragment : Fragment() {
         })
 
         view.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_action_refrigerator_to_myAddFragment)
+            findNavController().navigate(R.id.action_action_refrigerator_to_floatingAddFragment)
         }
 
 
