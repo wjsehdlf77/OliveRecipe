@@ -10,9 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentRefrigeratorBinding
+import com.example.oliverecipe.navigation.view.oliveListAdapter
 import com.example.oliverecipe.refrigeratoritem.list.ListAdapter
 import com.example.oliverecipe.refrigeratoritem.viewmodel.ItemViewModel
+import kotlinx.android.synthetic.main.alist_item.view.*
 import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
+import org.eclipse.paho.client.mqttv3.MqttClient
+import org.eclipse.paho.client.mqttv3.MqttException
+import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.lang.Exception
+import java.text.SimpleDateFormat
 
 private var _binding: FragmentRefrigeratorBinding? = null
 
@@ -48,6 +55,47 @@ class RefrigeratorViewFragment : Fragment() {
             findNavController().navigate(R.id.action_action_refrigerator_to_myAddFragment)
         }
 
+
+
+        mItemViewModel.readAllData.observe(viewLifecycleOwner) { item ->
+
+            try {
+
+
+                oliveData.getOliveData(item[0].itemName) {
+                    oliveData.getOliveData(item[0].validity.toString()){
+                        val currentTime : Long = System.currentTimeMillis()
+                        val currentDate = SimpleDateFormat("yyyyMMdd")
+                        currentDate.format(currentTime)
+
+                        for (i in item){
+                            val startDate = currentDate.parse(currentDate.format(currentTime)).time
+                            val endDate = currentDate.parse(i.validity.toString()).time
+                            if (((endDate - startDate) / (24 * 60 * 60 * 1000)) <= 1) {
+                                //mqtt
+                                val client =
+                                    MqttClient(
+                                        "tcp://172.30.1.21:1883",
+                                        MqttClient.generateClientId(),
+                                        null
+                                    )
+                                client.connect()
+                                client.publish(
+                                    "validity",
+                                    MqttMessage("${i.itemName}의 유통기간이 1일 남았습니다.".toByteArray())
+                                )
+                            }
+
+                        }
+
+                    }
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         // menu 추가
         setHasOptionsMenu(true)
         return view
@@ -59,6 +107,7 @@ class RefrigeratorViewFragment : Fragment() {
 //        mainActivity = context as MainActivity
 //
 //    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.delete_menu, menu)
