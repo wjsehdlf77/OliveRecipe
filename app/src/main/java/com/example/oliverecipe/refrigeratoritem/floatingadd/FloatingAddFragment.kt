@@ -50,10 +50,9 @@ class FloatingAddFragment : Fragment() {
 
             val floatingItem = Item(0, itemName, itemProperty, Integer.parseInt(validity.toString()))
 
-
             mItemViewModel.addItem(floatingItem)
 
-            Toast.makeText(requireContext(),"성공적으로 업데이트했습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"성공적으로 추가했습니다", Toast.LENGTH_SHORT).show()
 
             // navigate back
             findNavController().navigate(R.id.action_floatingAddFragment_to_action_refrigerator)
