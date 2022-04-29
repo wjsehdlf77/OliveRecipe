@@ -23,7 +23,7 @@ class ItemViewModel(application: Application): AndroidViewModel(application) {
         recentName = repository.recentName
     }
 
-    fun addItem(item: Item){// 파라미터에 만든 데이터클래스가 들어갑니다.
+    fun addItem(item: Item?){// 파라미터에 만든 데이터클래스가 들어갑니다.
         viewModelScope.launch(Dispatchers.IO) {
             repository.addItem(item)
         }

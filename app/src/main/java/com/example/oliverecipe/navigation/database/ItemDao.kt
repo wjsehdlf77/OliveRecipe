@@ -8,7 +8,7 @@ import com.example.oliverecipe.navigation.model.Item
 @Dao
 interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addItem(item: Item)
+    fun addItem(item: Item?)
 
     @Update
     fun updateItem(item:Item)
