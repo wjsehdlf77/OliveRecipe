@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_action_refrigerator_to_updateFragment"
             app:destination="@id/updateFragment" />
+        <action
+            android:id="@+id/action_action_refrigerator_to_floatingAddFragment"
+            app:destination="@id/floatingAddFragment" />
     </fragment>
 
     <fragment
@@ -76,4 +79,14 @@
             android:id="@+id/action_myAddFragment_to_action_refrigerator"
             app:destination="@id/action_refrigerator" />
     </fragment>
+    <fragment
+        android:id="@+id/floatingAddFragment"
+        android:name="com.example.oliverecipe.refrigeratoritem.floatingadd.FloatingAddFragment"
+        android:label="fragment_floating_add"
+        tools:layout="@layout/fragment_floating_add" >
+        <action
+            android:id="@+id/action_floatingAddFragment_to_action_refrigerator"
+            app:destination="@id/action_refrigerator" />
+    </fragment>
+
 </navigation>
