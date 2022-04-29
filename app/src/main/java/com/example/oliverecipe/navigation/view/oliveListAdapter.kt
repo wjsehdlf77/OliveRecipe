@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.oliverecipe.navigation.API.Row
 import com.example.oliverecipe.R
+import com.example.oliverecipe.navigation.API.Row
 import kotlinx.android.synthetic.main.alist_item.view.*
+import org.eclipse.paho.client.mqttv3.MqttClient
+import org.eclipse.paho.client.mqttv3.MqttException
+import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
 class oliveListAdapter (val rows: List<Row>)
@@ -77,6 +80,16 @@ class oliveListAdapter (val rows: List<Row>)
 
         view.favorite.setOnClickListener{
 
+        }
+        view.btn_sound.setOnClickListener {
+            try {
+                val client =
+                    MqttClient("tcp://172.30.1.21:1883", MqttClient.generateClientId(), null)
+                client.connect()
+                client.publish("data", MqttMessage("오늘의 추천 레시피는 ${view.reName.text}입니다. 필요 재료는 ${view.rIngredient.text}입니다.".toByteArray()))
+            } catch (e: MqttException) {
+                e.printStackTrace()
+            }
         }
 
         //MQTT publish를 여기서 한다. -> 라즈베리 파이에서 서브스크라이브

@@ -124,7 +124,6 @@ class AddFoodViewFragment : Fragment() {
 
         }
 
-
         val requestGalleryLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         )
@@ -187,13 +186,8 @@ class AddFoodViewFragment : Fragment() {
                         ?.let {
                             val bitmap = resizeBitmap(it, 900f, 0f)
                             val btp = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-                            val ingredient = runObjectDetection(btp)
-                            // api call
-                            oliveData.getOliveData("ingredient") {
-                                view.areyclerView.adapter = oliveListAdapter(it.cOOKRCP01?.row!!)
-//
-                            }
-//                            ingredient = runObjectDetection(btp)
+                             runObjectDetection(btp)
+
                         }
                 }
             } catch (e: Exception) {

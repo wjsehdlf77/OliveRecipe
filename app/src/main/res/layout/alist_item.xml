@@ -80,7 +80,7 @@
 
                 <TextView
                     android:id="@+id/reName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:paddingTop="8dp"

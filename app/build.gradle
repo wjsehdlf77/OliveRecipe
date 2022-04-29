@@ -105,4 +105,11 @@ dependencies {
             because '''androidx.work:work-runtime:2.1.0 pulled from play-services-ads has a bug using PendingIntent without FLAG_IMMUTABLE or FLAG_MUTABLE and will fail in Apps targeting S+.'''
         }
     }
+
+    // Mqtt
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+
+
 }
