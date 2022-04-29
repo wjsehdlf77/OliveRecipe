@@ -60,22 +60,18 @@ class RefrigeratorViewFragment : Fragment() {
         mItemViewModel.readAllData.observe(viewLifecycleOwner) { item ->
 
             try {
+                val currentTime : Long = System.currentTimeMillis()
+                val currentDate = SimpleDateFormat("yyyyMMdd")
+                currentDate.format(currentTime)
 
-
-                oliveData.getOliveData(item[0].itemName) {
-                    oliveData.getOliveData(item[0].validity.toString()){
-                        val currentTime : Long = System.currentTimeMillis()
-                        val currentDate = SimpleDateFormat("yyyyMMdd")
-                        currentDate.format(currentTime)
-
-                        for (i in item){
-                            val startDate = currentDate.parse(currentDate.format(currentTime)).time
-                            val endDate = currentDate.parse(i.validity.toString()).time
-                            if (((endDate - startDate) / (24 * 60 * 60 * 1000)) <= 1) {
-                                //mqtt
-                                val client =
-                                    MqttClient(
-                                        "tcp://172.30.1.21:1883",
+                for (i in item!!){
+                    val startDate = currentDate.parse(currentDate.format(currentTime)).time
+                    val endDate = currentDate.parse(i.validity.toString()).time
+                    if (((endDate - startDate) / (24 * 60 * 60 * 1000)) <= 1) {
+                        //mqtt
+                            val client =
+                                MqttClient(
+                                    "tcp://172.30.1.21:1883",
                                         MqttClient.generateClientId(),
                                         null
                                     )
@@ -85,12 +81,7 @@ class RefrigeratorViewFragment : Fragment() {
                                     MqttMessage("${i.itemName}의 유통기간이 1일 남았습니다.".toByteArray())
                                 )
                             }
-
                         }
-
-                    }
-
-                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
