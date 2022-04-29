@@ -57,10 +57,6 @@ class FoodbankViewFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-
-
     }
-
-
 }
 

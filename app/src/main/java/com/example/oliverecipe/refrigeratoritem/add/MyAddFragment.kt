@@ -56,6 +56,8 @@ class MyAddFragment : Fragment() {
             // Do something with the result...
             //add_itemName.setText(result)
 
+
+
             val arraySize = result?.size
             if (arraySize == 5) {
                 add_itemName0.setText(result?.get(0) ?:"")

@@ -58,19 +58,19 @@ import kotlinx.coroutines.withContext
 import org.tensorflow.lite.support.image.TensorImage
 
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
-import org.w3c.dom.Text
-import retrofit2.http.Url
+
 
 
 import java.io.File
-import java.io.IOException
 
-import java.lang.Exception
-import java.net.MalformedURLException
+
+
+
 
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.Exception
 import kotlin.collections.ArrayList
 
 private var _binding: FragmentAddBinding? = null
@@ -110,14 +110,15 @@ class AddFoodViewFragment : Fragment() {
 
         binding.buttonAdd.setOnClickListener {
 
+            val data = listItem.distinct()
 
-
-            if (listItem != null) {
-                setFragmentResult("requestKey", bundleOf("bundleKey" to listItem))
+            if (data.size != 0) {
+                setFragmentResult("requestKey", bundleOf("bundleKey" to data))
 
 
                 findNavController().navigate(R.id.action_action_add_to_myAddFragment)
             } else {
+
                 Toast.makeText(mainActivity, "추가할 재료가 없습니다", Toast.LENGTH_SHORT).show()
             }
 
