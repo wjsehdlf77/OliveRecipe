@@ -1,5 +1,6 @@
 package com.example.oliverecipe.navigation
 
+import android.app.LauncherActivity
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -70,6 +71,7 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 private var _binding: FragmentAddBinding? = null
 private val binding get() = _binding!!
@@ -77,12 +79,7 @@ private val binding get() = _binding!!
 
 
 private const val MAX_FONT_SIZE = 96F
-private val listItem = mutableListOf<String>()
-private val listgrade = mutableListOf<Float>()
-
-private var ItemName:String? = null
-
-
+private var listItem = ArrayList<String>()
 
 class AddFoodViewFragment : Fragment() {
 
@@ -113,14 +110,13 @@ class AddFoodViewFragment : Fragment() {
 
         binding.buttonAdd.setOnClickListener {
 
-//            val data = listItem.distinct().toString()
 
-            val result:String? = ItemName
 
-            if (result != null) {
-                setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+            if (listItem != null) {
+                setFragmentResult("requestKey", bundleOf("bundleKey" to listItem))
 
-                findNavController().navigate(R.id.action_action_add_to_myAddFragment)  //버튼을 누르면 addFragment로 화면전환합니다.
+
+                findNavController().navigate(R.id.action_action_add_to_myAddFragment)
             } else {
                 Toast.makeText(mainActivity, "추가할 재료가 없습니다", Toast.LENGTH_SHORT).show()
             }
@@ -261,8 +257,8 @@ class AddFoodViewFragment : Fragment() {
 
             // Step 2: Initialize the detector object
             val options = ObjectDetector.ObjectDetectorOptions.builder()
-                .setMaxResults(1)
-                .setScoreThreshold(0.8f)
+                .setMaxResults(5)
+                .setScoreThreshold(0.5f)
                 .build()
             val detector = ObjectDetector.createFromFileAndOptions(
                 mainActivity,
@@ -332,10 +328,10 @@ class AddFoodViewFragment : Fragment() {
                     it.text, box.left + margin,
                     box.top + tagSize.height().times(1F), pen
                 )
-//            listItem.add(it.category.label)
-                ItemName = it.category.label
+
+                listItem.add(transfer(it.category.label))
             }
-//        retrun ingredient
+
             return outputBitmap
         }
 
@@ -363,7 +359,9 @@ class AddFoodViewFragment : Fragment() {
 
         override fun onDestroyView() {
             super.onDestroyView()
+            listItem.clear()
             _binding = null
+
         }
 
         object imageLoader {
@@ -378,6 +376,76 @@ class AddFoodViewFragment : Fragment() {
 
             }
         }
+    private fun transfer(label: String):String {
+        lateinit var kr:String
+        if (label == "tomato") {
+            kr = "토마토"
+        } else if (label == "banana") {
+            kr = "바나나"
+        } else if (label == "apple") {
+            kr = "사과"
+        } else if (label == "bread") {
+            kr = "빵"
+        } else if (label == "chicken_breast") {
+            kr = "닭가슴살"
+        } else if (label == "eggs") {
+            kr = "달걀"
+        } else if (label == "flour") {
+            kr = "밀가루"
+        } else if (label == "green_beens") {
+            kr = "강낭콩"
+        } else if (label == "heavy_cream") {
+            kr = "크림"
+        } else if (label == "potato") {
+            kr = "감자"
+        } else if (label == "shrimp") {
+            kr = "새우"
+        } else if (label == "sweet_potato") {
+            kr = "달콤감자"
+        } else if (label == "beef") {
+            kr = "소고기"
+        } else if (label == "blueberries") {
+            kr = "블루베리"
+        } else if (label == "butter") {
+            kr = "버터"
+        } else if (label == "carrot") {
+            kr = "당근"
+        } else if (label == "cheese") {
+            kr = "치즈"
+        } else if (label == "chicken") {
+            kr = "닭고기"
+        } else if (label == "chocolate") {
+            kr = "초콜릿"
+        } else if (label == "corn") {
+            kr = "옥수수"
+        } else if (label == "goat_cheese") {
+            kr = "염소치즈"
+        } else if (label == "ground_beef") {
+            kr = "분쇄육"
+        } else if (label == "ham") {
+            kr = "햄"
+        } else if (label == "lime") {
+            kr = "라임"
+        } else if (label == "milk") {
+            kr = "우유"
+        } else if (label == "mushrooms") {
+            kr = "버섯"
+        } else if (label == "onion") {
+            kr = "양파"
+        } else if (label == "spinach") {
+            kr = "시금치"
+        } else if (label == "strawberries") {
+            kr = "딸기"
+        } else if (label == "sugar") {
+            kr = "설탕"
+        } else if (label == "banana") {
+            kr = "바나나"
+        } else {
+            kr = "없음"
+        }
+        return kr
     }
+
+}
 
 
