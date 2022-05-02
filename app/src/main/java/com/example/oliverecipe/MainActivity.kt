@@ -54,10 +54,9 @@ class MainActivity : AppCompatActivity()
                 R.id.action_home,
                 R.id.action_refrigerator,
                 R.id.action_foodbank,
-                R.id.action_favorite,
+                R.id.action_market,
                 R.id.action_shopping_bag,
-                R.id.action_add,
-                R.id.action_market
+                R.id.action_add
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
