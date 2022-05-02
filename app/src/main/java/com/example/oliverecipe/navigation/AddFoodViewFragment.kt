@@ -300,7 +300,7 @@ class AddFoodViewFragment : Fragment() {
             detectionResults.forEach {
                 // draw bounding box
                 pen.color = Color.RED
-                pen.strokeWidth = 8F
+                pen.strokeWidth = 6F
                 pen.style = Paint.Style.STROKE
                 val box = it.boundingBox
                 canvas.drawRect(box, pen)
@@ -313,7 +313,7 @@ class AddFoodViewFragment : Fragment() {
                 pen.color = Color.YELLOW
                 pen.strokeWidth = 2F
 
-                pen.textSize = MAX_FONT_SIZE
+                pen.textSize = 40F
                 pen.getTextBounds(it.text, 0, it.text.length, tagSize)
                 val fontSize: Float = pen.textSize * box.width() / tagSize.width()
 

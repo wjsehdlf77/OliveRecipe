@@ -48,7 +48,7 @@ class FloatingAddFragment : Fragment() {
 
         if (inputCheck(itemName,itemProperty,validity)){
 
-            val floatingItem = Item(0, itemName, itemProperty, Integer.parseInt(validity.toString()))
+            val floatingItem = Item(0, itemName, itemProperty + "개", Integer.parseInt(validity.toString()))
 
 
             mItemViewModel.addItem(floatingItem)

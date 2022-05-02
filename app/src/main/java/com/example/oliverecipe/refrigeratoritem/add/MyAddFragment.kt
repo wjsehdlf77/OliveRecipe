@@ -144,7 +144,7 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            user0 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user0 = Item(0,itemName, itemProperty + "개", Integer.parseInt(validity.toString()))
 
 
             if (arraySize != 1) {
@@ -167,7 +167,7 @@ class MyAddFragment : Fragment() {
         if (inputCheck(itemName, itemProperty, validity)) {
             // user object를 db에 전송
 
-            user1 = Item(0, itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user1 = Item(0, itemName, itemProperty + "개", Integer.parseInt(validity.toString()))
 
             if (arraySize != 2) {
                 insertDataToDatabase2()
@@ -190,7 +190,7 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            user2 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user2 = Item(0,itemName, itemProperty + "개", Integer.parseInt(validity.toString()))
 
             if (arraySize != 3) {
                 insertDataToDatabase3()
@@ -213,7 +213,7 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            user3 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user3 = Item(0,itemName, itemProperty + "개", Integer.parseInt(validity.toString()))
 
             if (arraySize != 4) {
                 insertDataToDatabase4()
@@ -234,7 +234,7 @@ class MyAddFragment : Fragment() {
         if(inputCheck(itemName,itemProperty,validity)){
             // user object를 db에 전송
 
-            user4 = Item(0,itemName, itemProperty, Integer.parseInt(validity.toString()))
+            user4 = Item(0,itemName, itemProperty + "개", Integer.parseInt(validity.toString()))
 
             save4 = true
 
