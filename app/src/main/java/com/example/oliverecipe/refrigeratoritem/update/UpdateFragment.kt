@@ -59,6 +59,7 @@ class UpdateFragment : Fragment() {
             val updatedItem = Item(args.currentItem.id, itemName, itemProperty,validity)
 
 
+
             mItemViewModel.updateItem(updatedItem)
 
             Toast.makeText(requireContext(),"성공적으로 업데이트했습니다",Toast.LENGTH_SHORT).show()
