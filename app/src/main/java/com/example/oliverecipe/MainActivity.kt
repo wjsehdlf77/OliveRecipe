@@ -1,16 +1,10 @@
 package com.example.oliverecipe
 
 import android.Manifest
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -18,13 +12,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.oliverecipe.navigation.API.Row
 import com.example.oliverecipe.databinding.ActivityMainBinding
-import com.example.oliverecipe.databinding.FragmentBagBinding
-import com.example.oliverecipe.navigation.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity()
 
@@ -47,7 +38,7 @@ class MainActivity : AppCompatActivity()
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        val navBottomView : BottomNavigationView = findViewById(R.id.bottom_navigation)
+        val navBottomView: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
 //        val drawerToggle = ActionBarDrawerToggle(
 //            MainActivity(),
@@ -57,13 +48,15 @@ class MainActivity : AppCompatActivity()
 //            R.string.app_name)
 //        drawerToggle.syncState()
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.action_home, R.id.action_refrigerator, R.id.action_foodbank, R.id.action_favorite, R.id.action_shopping_bag,
-                R.id.action_add, R.id.action_market
+                R.id.action_home,
+                R.id.action_refrigerator,
+                R.id.action_foodbank,
+                R.id.action_market,
+                R.id.action_shopping_bag,
+                R.id.action_add
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -72,9 +65,13 @@ class MainActivity : AppCompatActivity()
 
 
         // bottom_navigation.setOnNavigationItemSelectedListener(this)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+            1
+        ) }
 
-    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

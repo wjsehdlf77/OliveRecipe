@@ -15,7 +15,17 @@
         android:id="@+id/action_refrigerator"
         android:name="com.example.oliverecipe.navigation.RefrigeratorViewFragment"
         android:label="나의 냉장고"
-        tools:layout="@layout/fragment_refrigerator" />
+        tools:layout="@layout/fragment_refrigerator" >
+        <action
+            android:id="@+id/action_action_refrigerator_to_myAddFragment"
+            app:destination="@id/myAddFragment" />
+        <action
+            android:id="@+id/action_action_refrigerator_to_updateFragment"
+            app:destination="@id/updateFragment" />
+        <action
+            android:id="@+id/action_action_refrigerator_to_floatingAddFragment"
+            app:destination="@id/floatingAddFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/action_foodbank"
@@ -33,17 +43,54 @@
         android:id="@+id/action_shopping_bag"
         android:name="com.example.oliverecipe.navigation.BagViewFragment"
         android:label="장바구니"
-        tools:layout="@layout/fragment_bag" />
+        tools:layout="@layout/fragment_bag" >
+        <action
+            android:id="@+id/action_action_shopping_bag_to_action_market"
+            app:destination="@id/action_market" />
+    </fragment>
 
     <fragment
         android:id="@+id/action_add"
         android:name="com.example.oliverecipe.navigation.AddFoodViewFragment"
-        android:label="재료 추가"
-        tools:layout="@layout/fragment_add" />
+        android:label="객체 인식"
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_action_add_to_myAddFragment"
+            app:destination="@id/myAddFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/action_market"
         android:name="com.example.oliverecipe.navigation.MarketViewFragment"
         android:label="마켓으로 이동"
         tools:layout="@layout/fragment_market" />
+    <fragment
+        android:id="@+id/updateFragment"
+        android:name="com.example.oliverecipe.refrigeratoritem.update.UpdateFragment"
+        android:label="UpdateFragment" >
+        <action
+            android:id="@+id/action_updateFragment_to_action_refrigerator"
+            app:destination="@id/action_refrigerator" />
+        <argument
+            android:name="currentItem"
+            app:argType="com.example.oliverecipe.navigation.model.Item" />
+    </fragment>
+    <fragment
+        android:id="@+id/myAddFragment"
+        android:name="com.example.oliverecipe.refrigeratoritem.add.MyAddFragment"
+        android:label="MyAddFragment" >
+        <action
+            android:id="@+id/action_myAddFragment_to_action_refrigerator"
+            app:destination="@id/action_refrigerator" />
+    </fragment>
+    <fragment
+        android:id="@+id/floatingAddFragment"
+        android:name="com.example.oliverecipe.refrigeratoritem.floatingadd.FloatingAddFragment"
+        android:label="fragment_floating_add"
+        tools:layout="@layout/fragment_floating_add" >
+        <action
+            android:id="@+id/action_floatingAddFragment_to_action_refrigerator"
+            app:destination="@id/action_refrigerator" />
+    </fragment>
+
 </navigation>

@@ -20,10 +20,10 @@
             android:enabled="true"
             android:title="레시피 추천"/>
         <item
-            android:id="@+id/action_favorite"
+            android:id="@+id/action_market"
             android:icon="@drawable/push_icon"
             android:enabled="true"
-            android:title="북마크"/>
+            android:title="마켓"/>
         <item
             android:id="@+id/action_shopping_bag"
             android:icon="@drawable/ic_shopping_bag"
@@ -31,13 +31,9 @@
             android:title="장바구니"/>
         <item
             android:id="@+id/action_add"
-            android:icon="@drawable/ic_add"
+            android:icon="@drawable/ic_camera"
             android:enabled="true"
-            android:title="재료 추가"/>
-        <item
-            android:id="@+id/action_market"
-            android:icon="@drawable/ic_baseline_storefront_24"
-            android:enabled="true"
-            android:title="마켓으로 이동"/>
+            android:title="객체 인식"/>
+
     </group>
 </menu>

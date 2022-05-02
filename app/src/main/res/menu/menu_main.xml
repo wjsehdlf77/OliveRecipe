@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_menu_add"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_camera"
         android:title="add"
         app:showAsAction="ifRoom" />
 

@@ -1,34 +1,25 @@
 package com.example.oliverecipe.navigation
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import android.view.*
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.oliverecipe.MainActivity
 import com.example.oliverecipe.R
-import com.example.oliverecipe.databinding.AddItemBinding
 import com.example.oliverecipe.databinding.FragmentRefrigeratorBinding
-import com.example.oliverecipe.navigation.model.ItemData
-import com.example.oliverecipe.navigation.view.ItemAdapter
-import kotlinx.android.synthetic.main.add_item.*
-import java.io.File
+import com.example.oliverecipe.navigation.view.oliveListAdapter
+import com.example.oliverecipe.refrigeratoritem.list.ListAdapter
+import com.example.oliverecipe.refrigeratoritem.viewmodel.ItemViewModel
+import kotlinx.android.synthetic.main.alist_item.view.*
+import kotlinx.android.synthetic.main.fragment_refrigerator.view.*
+import org.eclipse.paho.client.mqttv3.MqttClient
+import org.eclipse.paho.client.mqttv3.MqttException
+import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.lang.Exception
 import java.text.SimpleDateFormat
-import java.util.*
 
 private var _binding: FragmentRefrigeratorBinding? = null
 
@@ -38,70 +29,101 @@ lateinit var mainActivity: MainActivity
 
 class RefrigeratorViewFragment : Fragment() {
 
-    private lateinit var itemList: ArrayList<ItemData>
-    private lateinit var itemAdapter: ItemAdapter
-
+    private lateinit var mItemViewModel: ItemViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRefrigeratorBinding.inflate(inflater, container, false)
+        // layout
+        val view = inflater.inflate(R.layout.fragment_refrigerator, container, false)
 
-        val view = binding.root
+        // recyclerView
+        val adapter = ListAdapter()
+        val recyclerView = view.recyclerview
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        // 뷰 모델 연결
+        mItemViewModel = ViewModelProvider(this).get(ItemViewModel::class.java)
+        mItemViewModel.readAllData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { user ->
+            adapter.setData(user)
+        })
+
+        view.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_action_refrigerator_to_floatingAddFragment)
+        }
+
+
+
+        mItemViewModel.readAllData.observe(viewLifecycleOwner) { item ->
+
+            try {
+                val currentTime : Long = System.currentTimeMillis()
+                val currentDate = SimpleDateFormat("yyyyMMdd")
+                currentDate.format(currentTime)
+
+                for (i in item!!){
+                    val startDate = currentDate.parse(currentDate.format(currentTime)).time
+                    val endDate = currentDate.parse(i.validity.toString()).time
+                    if (((endDate - startDate) / (24 * 60 * 60 * 1000)) <= 1) {
+                        //mqtt
+                            val client =
+                                MqttClient(
+                                    "tcp://172.30.1.21:1883",
+                                        MqttClient.generateClientId(),
+                                        null
+                                    )
+                                client.connect()
+                                client.publish(
+                                    "validity",
+                                    MqttMessage("${i.itemName}의 유통기간이 1일 남았습니다.".toByteArray())
+                                )
+                            }
+                        }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        // menu 추가
+        setHasOptionsMenu(true)
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//
+//        mainActivity = context as MainActivity
+//
+//    }
 
-        mainActivity = context as MainActivity
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.delete_menu, menu)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        itemList = ArrayList()
-
-        itemAdapter = ItemAdapter(requireContext(),itemList)
-
-        binding.mRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.mRecycler.adapter = itemAdapter
-
-        binding.addingBtn.setOnClickListener { addInfo() }
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId ==R.id.menu_delete){
+            deleteAllUsers() //deleteAlluser 함수를 실행시킵니다.
+        }
+        return super.onOptionsItemSelected(item)
     }
 
-    private fun addInfo() {
-        val inflter = LayoutInflater.from(requireContext())
-        val v = inflter.inflate(R.layout.add_item,null)
-        /**set view*/
-        val additemName = v.findViewById<EditText>(R.id.add_item_name)
-        val additemvalid = v.findViewById<EditText>(R.id.add_item_valid)
-
-        val addDialog = AlertDialog.Builder(requireContext())
-
-        addDialog.setView(v)
-        addDialog.setPositiveButton("확인"){
-                dialog,_->
-            val names = additemName.text.toString()
-            val number = additemvalid.text.toString()
-            itemList.add(ItemData("재료 이름 : $names","유통 기한 : $number"))
-            itemAdapter.notifyDataSetChanged()
-            Toast.makeText(requireContext(),"재료를 성공적으로 추가하였습니다", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+    private fun deleteAllUsers() {
+        val builder = android.app.AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("예"){ _, _ ->
+            mItemViewModel.deleteAllItems()
+            Toast.makeText(requireContext(),"삭제 완료",
+                Toast.LENGTH_SHORT).show()
         }
-        addDialog.setNegativeButton("취소"){
-                dialog,_->
-            dialog.dismiss()
-            Toast.makeText(requireContext(),"취소", Toast.LENGTH_SHORT).show()
-
+        builder.setNegativeButton("아니오") { _, _ ->
         }
-        addDialog.create()
-        addDialog.show()
+
+        builder.setTitle("모든 재료 삭제")
+        builder.setMessage("모든 항목을 삭제하시겠습니까?")
+        builder.create().show()
     }
 
 }
