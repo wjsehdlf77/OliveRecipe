@@ -80,6 +80,7 @@ class oliveListAdapter (val rows: List<Row>)
 
         view.favorite.setOnClickListener{
 
+
         }
         view.btn_sound.setOnClickListener {
             try {

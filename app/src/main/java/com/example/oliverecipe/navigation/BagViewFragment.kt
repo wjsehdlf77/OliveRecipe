@@ -82,7 +82,7 @@ class BagViewFragment : Fragment() {
 
 
         binding.urlButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://naver.com"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ssg.com/"))
             startActivity(intent)
         }
     }
