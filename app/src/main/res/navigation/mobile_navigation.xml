@@ -43,7 +43,11 @@
         android:id="@+id/action_shopping_bag"
         android:name="com.example.oliverecipe.navigation.BagViewFragment"
         android:label="장바구니"
-        tools:layout="@layout/fragment_bag" />
+        tools:layout="@layout/fragment_bag" >
+        <action
+            android:id="@+id/action_action_shopping_bag_to_action_market"
+            app:destination="@id/action_market" />
+    </fragment>
 
     <fragment
         android:id="@+id/action_add"

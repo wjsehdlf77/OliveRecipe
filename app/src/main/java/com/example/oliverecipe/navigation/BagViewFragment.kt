@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.oliverecipe.MainActivity
+import com.example.oliverecipe.R
 import com.example.oliverecipe.databinding.FragmentBagBinding
 import com.example.oliverecipe.databinding.ItemTodoBinding
 import com.example.oliverecipe.navigation.database.OliveRecipe
@@ -82,8 +84,7 @@ class BagViewFragment : Fragment() {
 
 
         binding.urlButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ssg.com/"))
-            startActivity(intent)
+            findNavController().navigate(R.id.action_action_shopping_bag_to_action_market)
         }
     }
 

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.oliverecipe.R
@@ -14,6 +16,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
+var favoriteName : String? = null
 
 class oliveListAdapter (val rows: List<Row>)
     : RecyclerView.Adapter<oliveListAdapter.ViewHolder>() {
@@ -62,7 +65,8 @@ class oliveListAdapter (val rows: List<Row>)
             howto9.text = row.mANUAL09
             Glide.with(itemView).load(row.mANUALIMG10).into(itemView.imageView5)
             val howto10: TextView = itemView.findViewById(R.id.howto10)
-            howto10.text = row.mANUAL10 }
+            howto10.text = row.mANUAL10
+        }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewHolder {
         var view = LayoutInflater.from(parent.context)
@@ -79,9 +83,10 @@ class oliveListAdapter (val rows: List<Row>)
         }
 
         view.favorite.setOnClickListener{
-
-
+            favoriteName = view.reName.text.toString()
+            Toast.makeText(view.context, "북마크에 추가했습니다", Toast.LENGTH_SHORT).show()
         }
+
         view.btn_sound.setOnClickListener {
             try {
                 val client =
@@ -102,4 +107,3 @@ class oliveListAdapter (val rows: List<Row>)
         holder.bind(data)
     }
     override fun getItemCount(): Int = rows.size }
-
